@@ -1,0 +1,4418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#2b1a2e">
+    <title>五段动词判断 · 京都风</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            font-family: "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", system-ui, 'Segoe UI', serif;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+        body {
+            background: linear-gradient(180deg, #2b1a2e 0%, #4a2c3a 30%, #8b4a4a 60%, #d98c5f 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 10px 8px 20px;
+            padding: max(10px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40vh;
+            background:
+                radial-gradient(ellipse 60% 30% at 20% 100%, #1e1418 0%, transparent 70%),
+                radial-gradient(ellipse 50% 25% at 80% 100%, #231820 0%, transparent 70%),
+                linear-gradient(transparent 60%, #1a1015 60%);
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .sakura {
+            position: fixed;
+            top: -20px;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle at 30% 30%, #ffd1dc, #ff8fa3);
+            border-radius: 50% 0 50% 50%;
+            transform: rotate(45deg);
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 1;
+            animation: sakuraFall linear infinite;
+        }
+        @keyframes sakuraFall {
+            0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
+            10% { opacity: 0.85; }
+            90% { opacity: 0.85; }
+            100% { transform: translateY(105vh) rotate(360deg) translateX(60px); opacity: 0; }
+        }
+
+        .game-wrapper {
+            width: 100%;
+            max-width: 1400px;
+            position: relative;
+            z-index: 2;
+            background:
+                repeating-linear-gradient(90deg,
+                    #5c3a26 0px, #5c3a26 28px,
+                    #4a2e1d 28px, #4a2e1d 30px),
+                linear-gradient(180deg, #6b4429, #3d2415);
+            border-radius: 4px 4px 10px 10px;
+            box-shadow:
+                0 30px 60px rgba(0,0,0,0.8),
+                inset 0 2px 0 rgba(255,220,180,0.15),
+                inset 0 -4px 12px rgba(0,0,0,0.6);
+            padding: 0 0 16px;
+            border: 3px solid #2a1810;
+        }
+        .roof {
+            position: relative;
+            height: 36px;
+            margin: -12px -18px 8px;
+            background:
+                repeating-linear-gradient(90deg,
+                    #3a3a42 0px, #3a3a42 16px,
+                    #2a2a32 16px, #2a2a32 18px),
+                linear-gradient(180deg, #4a4a52, #22222a);
+            border-radius: 14px 14px 4px 4px;
+            box-shadow:
+                0 6px 12px rgba(0,0,0,0.7),
+                inset 0 3px 0 rgba(255,255,255,0.1),
+                inset 0 -4px 8px rgba(0,0,0,0.5);
+            border-bottom: 3px solid #1a1a20;
+        }
+        .roof::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 10px;
+            right: 10px;
+            height: 12px;
+            background: linear-gradient(180deg, #5a5a62, #3a3a42);
+            border-radius: 8px 8px 0 0;
+            box-shadow: inset 0 2px 0 rgba(255,255,255,0.12);
+        }
+        .roof::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: -6px;
+            right: -6px;
+            height: 10px;
+            background: linear-gradient(180deg, #2a2a32, #14141a);
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+        .noren {
+            position: absolute;
+            top: 26px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .noren-panel {
+            width: 38px;
+            height: 34px;
+            background: linear-gradient(180deg, #1e3a5c, #16304a);
+            border: 1px solid #0d1e30;
+            position: relative;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+        }
+        .noren-panel:first-child { border-radius: 0 0 0 6px; }
+        .noren-panel:last-child { border-radius: 0 0 6px 0; }
+        .noren-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f5e6c8;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-family: "Yu Mincho", serif;
+            text-shadow: 0 1px 2px #000;
+        }
+
+        .main-layout {
+            display: flex;
+            gap: 12px;
+            padding: 0 16px;
+            align-items: flex-start;
+            margin-top: 30px;
+        }
+
+        .game-column {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 52px;
+            flex-shrink: 0;
+            transition: width 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+            position: relative;
+            z-index: 20;
+        }
+        .sidebar.expanded {
+            width: 280px;
+        }
+        .sidebar-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.35s ease, opacity 0.25s ease, margin 0.3s ease;
+            margin-top: 0;
+        }
+        .sidebar.expanded .sidebar-inner {
+            max-height: 2000px;
+            opacity: 1;
+            margin-top: 0;
+        }
+        .sidebar-toggle {
+            width: 100%;
+            background: linear-gradient(180deg, #6b4429, #4a2e1d);
+            border: 2px solid #2a1810;
+            border-radius: 6px;
+            padding: 10px 0;
+            cursor: pointer;
+            touch-action: manipulation;
+            font-family: "Yu Mincho", serif;
+            color: #f5e6c8;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-shadow: 0 1px 2px #000;
+            box-shadow:
+                inset 0 2px 0 rgba(255,220,180,0.15),
+                inset 0 -2px 6px rgba(0,0,0,0.5),
+                0 4px 10px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+        .sidebar-toggle:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 2px 0 rgba(255,220,180,0.15), inset 0 -2px 6px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.5);
+        }
+        .sidebar-toggle .toggle-icon {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+        .sidebar.expanded .sidebar-toggle .toggle-icon {
+            transform: rotate(180deg);
+        }
+        .sidebar-toggle .toggle-label {
+            display: none;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+        .sidebar.expanded .sidebar-toggle .toggle-label {
+            display: inline;
+        }
+        .sidebar:not(.expanded) .sidebar-toggle .toggle-icon {
+            transform: rotate(0deg);
+        }
+        .sidebar:not(.expanded) .sidebar-toggle::after {
+            content: '设 置';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-size: 0.6rem;
+            color: #d4a86a;
+            letter-spacing: 3px;
+            margin-top: 6px;
+            text-shadow: 0 1px 2px #000;
+            pointer-events: none;
+        }
+
+        .sidebar .side-panel {
+            background: linear-gradient(180deg, #6b4429, #4a2e1d);
+            padding: 12px;
+            border-radius: 3px;
+            box-shadow:
+                inset 0 2px 0 rgba(255,220,180,0.15),
+                inset 0 -2px 6px rgba(0,0,0,0.5),
+                0 4px 10px rgba(0,0,0,0.5);
+            border: 2px solid #2a1810;
+            width: 100%;
+        }
+        .sidebar .side-panel-title {
+            font-size: 0.75rem;
+            color: #d4a86a;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-family: "Yu Mincho", serif;
+            text-shadow: 0 1px 2px #000;
+            border-bottom: 1px solid #8b6a4a;
+            padding-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sidebar .side-panel-title .title-text {
+            flex: 1;
+            text-align: center;
+        }
+        .clear-all-btn {
+            background: linear-gradient(180deg, #8b2a1a, #6b1a0a);
+            border: 1px solid #d4a86a;
+            border-radius: 3px;
+            color: #f5e6c8;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 0 #3a1510;
+            transition: all 0.05s ease;
+            touch-action: manipulation;
+            font-family: "Yu Mincho", serif;
+            white-space: nowrap;
+        }
+        .clear-all-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 0 0 #3a1510;
+        }
+
+        .speed-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: #f5e6c8;
+            font-weight: 500;
+            font-size: 0.85rem;
+            font-family: "Yu Mincho", serif;
+            text-shadow: 0 1px 2px #000;
+            padding: 4px 0;
+        }
+        .speed-display .speed-label {
+            color: #d4a86a;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+        .speed-display .speed-value {
+            color: #ffd966;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .word-input-area {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .word-input-area input {
+            width: 100%;
+            padding: 9px 14px;
+            border-radius: 3px;
+            border: 2px solid #8b3a2a;
+            background: linear-gradient(180deg, #f5e6c8, #e8d4a8);
+            color: #3a1a10;
+            font-size: 0.85rem;
+            box-shadow:
+                inset 0 2px 6px rgba(139,58,42,0.2),
+                0 2px 4px rgba(0,0,0,0.4);
+            outline: none;
+            font-weight: 500;
+            font-family: "Yu Mincho", serif;
+        }
+        .word-input-area input::placeholder {
+            color: #8b6a5a;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+        .add-btn {
+            background: linear-gradient(180deg, #5a7a4a, #3a5a2a);
+            box-shadow:
+                0 4px 0 #1a2a10,
+                0 6px 12px rgba(0,0,0,0.6),
+                inset 0 1px 0 rgba(220,255,180,0.25);
+            border-color: #a8d48a;
+            font-weight: 700;
+        }
+
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            max-height: 160px;
+            overflow-y: auto;
+            padding: 5px 3px;
+            scrollbar-width: thin;
+            scrollbar-color: #8b3a2a #2a1810;
+            background: rgba(42, 24, 16, 0.5);
+            border-radius: 3px;
+            border: 1px solid #4a2e1d;
+        }
+        .word-tag {
+            background: linear-gradient(180deg, #f5e6c8, #e8d4a8);
+            padding: 4px 4px 4px 10px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            color: #3a1a10;
+            box-shadow:
+                inset 0 0 0 1px #d4a86a,
+                0 2px 4px rgba(0,0,0,0.4);
+            border-left: 3px solid #8b3a2a;
+            font-weight: 600;
+            font-family: "Yu Mincho", serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: transform 0.1s ease;
+        }
+        .word-tag.godan-tag { border-left-color: #5a7a4a; }
+        .word-tag.other-tag { border-left-color: #c04a35; }
+        .word-tag.empty-tag {
+            border-left-color: #8b6a5a;
+            opacity: 0.9;
+            font-style: italic;
+            color: #8b6a5a;
+            padding: 4px 10px;
+        }
+        .word-tag .tag-text {
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .word-tag .tag-delete {
+            background: rgba(139, 58, 42, 0.85);
+            border: none;
+            border-radius: 3px;
+            color: #f5e6c8;
+            font-size: 0.7rem;
+            font-weight: 900;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            transition: all 0.1s ease;
+            touch-action: manipulation;
+            flex-shrink: 0;
+        }
+        .word-tag .tag-delete:hover {
+            background: #c62828;
+            transform: scale(1.1);
+        }
+        .word-tag .tag-delete:active {
+            transform: scale(0.9);
+        }
+
+        .status-msg {
+            font-size: 0.75rem;
+            color: #ffd966;
+            padding: 6px 8px;
+            min-height: 18px;
+            font-family: "Yu Mincho", serif;
+            text-shadow: 0 1px 2px #000;
+            text-align: center;
+            background: rgba(139, 58, 42, 0.3);
+            border-radius: 3px;
+            border: 1px solid #6b2a1a;
+        }
+        .pool-info {
+            font-size: 0.68rem;
+            color: #d4a86a;
+            padding: 4px 8px;
+            font-family: "Yu Mincho", serif;
+            text-shadow: 0 1px 2px #000;
+            text-align: center;
+        }
+
+        .theme-btn {
+            background: linear-gradient(180deg, #8b3a2a, #5a1a0a);
+            border: 2px solid #d4a86a;
+            border-radius: 50px;
+            padding: 10px 24px;
+            color: #f5e6c8;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            touch-action: manipulation;
+            font-family: "Yu Mincho", serif;
+            text-shadow: 0 1px 2px #000;
+            box-shadow:
+                0 4px 0 #2a0e05,
+                0 6px 14px rgba(0,0,0,0.6),
+                inset 0 1px 0 rgba(255,220,180,0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+        .theme-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255,200,100,0.25), transparent 60%);
+            pointer-events: none;
+        }
+        .theme-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #2a0e05, 0 3px 8px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,220,180,0.3);
+        }
+        .theme-btn .btn-icon {
+            font-size: 1.1rem;
+            line-height: 1;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5));
+        }
+        .theme-btn .btn-text {
+            position: relative;
+            z-index: 1;
+        }
+        .theme-btn-primary {
+            background: linear-gradient(180deg, #c04a35, #8b2a1a);
+            border-color: #ffd9b3;
+            box-shadow:
+                0 4px 0 #3a0e05,
+                0 6px 14px rgba(0,0,0,0.6),
+                inset 0 1px 0 rgba(255,220,180,0.4),
+                0 0 20px rgba(255,150,80,0.35);
+        }
+        .theme-btn-primary::before {
+            background: radial-gradient(circle at 30% 20%, rgba(255,220,150,0.4), transparent 60%);
+        }
+        .theme-btn-gold {
+            background: linear-gradient(180deg, #d4a017, #a37a0a);
+            border-color: #ffe066;
+            color: #2a1410;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+            box-shadow:
+                0 4px 0 #6b4a00,
+                0 6px 14px rgba(0,0,0,0.6),
+                inset 0 1px 0 rgba(255,255,200,0.5),
+                0 0 20px rgba(255,200,80,0.4);
+        }
+        .theme-btn-gold::before {
+            background: radial-gradient(circle at 30% 20%, rgba(255,255,220,0.6), transparent 60%);
+        }
+
+        .gameover-title {
+            font-size: 1.7rem;
+            font-weight: 900;
+            color: #ff5252;
+            text-shadow:
+                0 0 20px #ff1744,
+                0 2px 0 #8b1a1a,
+                0 4px 10px #000;
+            margin-bottom: 4px;
+            letter-spacing: 5px;
+            animation: pulse 1.5s infinite;
+            font-family: "Yu Mincho", serif;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.06); opacity: 0.9; }
+        }
+        .gameover-sub {
+            font-size: 0.8rem;
+            color: #ffd966;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-family: "Yu Mincho", serif;
+            letter-spacing: 2px;
+        }
+        .gameover-stats {
+            font-size: 0.75rem;
+            color: #f5e6c8;
+            margin-bottom: 14px;
+            text-align: center;
+            line-height: 1.7;
+            font-family: "Yu Mincho", serif;
+            background: rgba(139,58,42,0.25);
+            padding: 7px 18px;
+            border-radius: 4px;
+            border: 1px solid #8b3a2a;
+        }
+        .gameover-stats .correct-count { color: #8fbc5a; font-weight: 700; }
+        .gameover-stats .wrong-count { color: #ff8a80; font-weight: 700; }
+        .gameover-stats .miss-count { color: #ffb74d; font-weight: 700; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            padding: 0 0 10px;
+            gap: 8px;
+            position: relative;
+        }
+        .health-area {
+            flex: 1;
+            min-width: 0;
+            background: linear-gradient(180deg, #f5e6c8, #e8d4a8);
+            border-radius: 3px;
+            padding: 7px 12px 7px 8px;
+            box-shadow:
+                inset 0 0 0 2px #8b3a2a,
+                inset 0 0 0 4px #d4a86a,
+                inset 0 0 12px rgba(139,58,42,0.25),
+                0 4px 8px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #6b2a1a;
+            position: relative;
+        }
+        .health-area::before,
+        .health-area::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            bottom: -3px;
+            width: 5px;
+            background: linear-gradient(90deg, #8b3a2a, #c04a35, #8b3a2a);
+            border-radius: 2px;
+            box-shadow: 0 0 4px rgba(0,0,0,0.5);
+        }
+        .health-area::before { left: -4px; }
+        .health-area::after { right: -4px; }
+
+        .health-icon {
+            font-size: 1rem;
+            flex-shrink: 0;
+            line-height: 1;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4));
+        }
+        .health-bar-bg {
+            flex: 1;
+            height: 16px;
+            background: #2a1410;
+            border-radius: 3px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 6px #000000aa;
+            position: relative;
+            border: 1px solid #6b2a1a;
+        }
+        .health-bar-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #c62828, #e53935, #f4a261, #8fbc5a);
+            background-size: 200% 100%;
+            background-position: 0% 0;
+            border-radius: 2px;
+            transition: width 0.35s cubic-bezier(0.34, 1.2, 0.64, 1), background-position 0.35s ease;
+            box-shadow: 0 0 10px #ff5252aa, inset 0 1px 2px #ffffff55;
+        }
+        .health-bar-fill.low {
+            background: linear-gradient(90deg, #8b1a1a, #c62828, #e53935, #ff7043);
+            background-size: 200% 100%;
+            background-position: 100% 0;
+            box-shadow: 0 0 14px #ff1744cc, inset 0 1px 2px #ffffff55;
+        }
+        .health-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #3a1a10;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+            flex-shrink: 0;
+            min-width: 40px;
+            text-align: right;
+            font-family: "Yu Mincho", serif;
+        }
+
+        .target-box {
+            background: linear-gradient(180deg, #f5e6c8, #e8d4a8);
+            padding: 7px 14px;
+            border-radius: 3px;
+            font-weight: 600;
+            color: #3a1a10;
+            box-shadow:
+                inset 0 0 0 2px #8b3a2a,
+                inset 0 0 0 4px #d4a86a,
+                inset 0 0 12px rgba(139,58,42,0.2),
+                0 4px 8px rgba(0,0,0,0.5);
+            border: 1px solid #6b2a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.2;
+            text-align: center;
+            min-width: 110px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .target-box::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            background:
+                repeating-linear-gradient(0deg, transparent 0 14px, rgba(139,58,42,0.12) 14px 15px),
+                repeating-linear-gradient(90deg, transparent 0 14px, rgba(139,58,42,0.12) 14px 15px);
+            pointer-events: none;
+            border-radius: 2px;
+        }
+        .target-hint {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #8b3a2a;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            position: relative;
+            z-index: 1;
+        }
+        .target-word {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #2a1410;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+            position: relative;
+            z-index: 1;
+            font-family: "Yu Mincho", serif;
+        }
+        .target-sub {
+            font-size: 0.55rem;
+            font-weight: 500;
+            color: #6b4a3a;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            max-height: 70vh;
+            margin: 0 auto;
+            background: #0b1a22;
+            border-radius: 3px;
+            overflow: hidden;
+            box-shadow:
+                inset 0 0 30px #00000066,
+                0 8px 20px #00000080,
+                0 0 0 4px #4a2e1d,
+                0 0 0 8px #d4a86a,
+                0 0 0 10px #8b3a2a,
+                0 0 0 12px #2a1810;
+            border: 1px solid #1a0e08;
+            touch-action: none;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, #17323f, #081016);
+        }
+
+        .pause-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #f5e6c8, #e8d4a8);
+            border: 2px solid #8b3a2a;
+            box-shadow:
+                inset 0 0 0 2px #d4a86a,
+                0 4px 10px rgba(0,0,0,0.6),
+                0 0 0 2px #2a1810;
+            cursor: pointer;
+            z-index: 7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #8b3a2a;
+            transition: all 0.1s ease;
+            touch-action: manipulation;
+            padding: 0;
+            line-height: 1;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+            user-select: none;
+        }
+        .pause-btn:hover {
+            background: linear-gradient(180deg, #ffe8c8, #f0d8b0);
+            transform: scale(1.05);
+        }
+        .pause-btn:active {
+            transform: scale(0.92);
+            box-shadow:
+                inset 0 0 0 2px #d4a86a,
+                0 2px 6px rgba(0,0,0,0.6),
+                0 0 0 2px #2a1810;
+        }
+        .pause-btn .pause-icon {
+            display: inline-block;
+            transform: translateY(-1px);
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+        }
+        .pause-btn.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.6);
+        }
+
+        .start-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 10, 8, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 8;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+            padding: 12px;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .start-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .start-icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 20px rgba(255, 200, 100, 0.7));
+            animation: pulse-icon 2s ease-in-out infinite;
+        }
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .start-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #ffd966;
+            text-shadow:
+                0 0 20px #ffb800,
+                0 0 40px #ff8c00,
+                0 2px 0 #b8860b,
+                0 4px 12px #000;
+            margin-bottom: 8px;
+            letter-spacing: 6px;
+            font-family: "Yu Mincho", serif;
+        }
+        .start-sub {
+            font-size: 0.9rem;
+            color: #f5e6c8;
+            font-weight: 500;
+            font-family: "Yu Mincho", serif;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px #000;
+            opacity: 0.9;
+        }
+        .start-hint {
+            font-size: 0.75rem;
+            color: #d4a86a;
+            margin-top: 20px;
+            font-family: "Yu Mincho", serif;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 2px #000;
+            padding: 6px 14px;
+            border: 1px solid #8b6a4a;
+            border-radius: 20px;
+            background: rgba(42, 24, 16, 0.6);
+        }
+
+        .difficulty-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 10, 8, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(6px);
+            padding: 16px;
+            touch-action: manipulation;
+        }
+        .difficulty-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .difficulty-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #ffd966;
+            text-shadow:
+                0 0 20px #ffb800,
+                0 0 40px #ff8c00,
+                0 2px 0 #b8860b,
+                0 4px 12px #000;
+            margin-bottom: 6px;
+            letter-spacing: 6px;
+            font-family: "Yu Mincho", serif;
+        }
+        .difficulty-sub {
+            font-size: 0.8rem;
+            color: #d4a86a;
+            margin-bottom: 20px;
+            font-family: "Yu Mincho", serif;
+            letter-spacing: 2px;
+            text-shadow: 0 1px 2px #000;
+        }
+        .difficulty-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 320px;
+        }
+        .difficulty-select-btn {
+            background: linear-gradient(180deg, #6b4429, #4a2e1d);
+            border: 2px solid #8b6a4a;
+            border-radius: 6px;
+            padding: 14px 20px;
+            color: #f5e6c8;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 6px;
+            cursor: pointer;
+            transition: all 0.12s ease;
+            touch-action: manipulation;
+            font-family: "Yu Mincho", serif;
+            text-shadow: 0 1px 2px #000;
+            box-shadow: 0 4px 0 #1a0e08, 0 8px 16px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+        }
+        .difficulty-select-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #1a0e08, 0 4px 10px rgba(0,0,0,0.6);
+        }
+        .difficulty-select-btn .speed-tag {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            color: #ffd966;
+            font-weight: 700;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+        .difficulty-select-btn.easy {
+            background: linear-gradient(180deg, #4a7a3a, #2a5a1a);
+            border-color: #8fbc5a;
+        }
+        .difficulty-select-btn.normal {
+            background: linear-gradient(180deg, #8b6a2a, #6b4a1a);
+            border-color: #d4a86a;
+        }
+        .difficulty-select-btn.nightmare {
+            background: linear-gradient(180deg, #8b3a2a, #5a1a0a);
+            border-color: #ff8a5c;
+        }
+        .difficulty-select-btn.hell {
+            background: linear-gradient(180deg, #5a0a0a, #3a0000);
+            border-color: #ff1744;
+            box-shadow: 0 4px 0 #1a0000, 0 0 20px rgba(255, 23, 68, 0.5), 0 8px 16px rgba(0,0,0,0.6);
+        }
+        .difficulty-select-btn.hell .speed-tag { color: #ff8a80; }
+
+        .gameover-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 10, 8, 0.92);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            backdrop-filter: blur(5px);
+            padding: 12px;
+        }
+        .gameover-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .victory-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 10, 8, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 11;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            padding: 12px;
+            overflow: hidden;
+        }
+        .victory-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .victory-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: victoryPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes victoryPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .victory-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #ffd966;
+            text-shadow:
+                0 0 20px #ffb800,
+                0 0 40px #ff8c00,
+                0 2px 0 #b8860b,
+                0 4px 12px #000;
+            margin-bottom: 4px;
+            letter-spacing: 8px;
+            font-family: "Yu Mincho", serif;
+            animation: victoryGlow 1.5s ease-in-out infinite;
+        }
+        @keyframes victoryGlow {
+            0%, 100% { text-shadow: 0 0 20px #ffb800, 0 0 40px #ff8c00, 0 2px 0 #b8860b, 0 4px 12px #000; }
+            50% { text-shadow: 0 0 30px #ffe066, 0 0 60px #ffb800, 0 2px 0 #b8860b, 0 4px 12px #000; }
+        }
+        .victory-sub {
+            font-size: 0.9rem;
+            color: #f5e6c8;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-family: "Yu Mincho", serif;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 4px #000;
+        }
+        .victory-stats {
+            font-size: 0.75rem;
+            color: #f5e6c8;
+            margin-bottom: 14px;
+            text-align: center;
+            line-height: 1.8;
+            font-family: "Yu Mincho", serif;
+            background: rgba(184, 134, 11, 0.35);
+            padding: 8px 22px;
+            border-radius: 4px;
+            border: 2px solid #ffd966;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.4);
+        }
+        .victory-stats .correct-count { color: #8fbc5a; font-weight: 700; }
+        .victory-stats .miss-count { color: #ffb74d; font-weight: 700; }
+
+        .ko-container {
+            width: 160px;
+            height: 110px;
+            margin-bottom: 6px;
+            position: relative;
+            animation: koFloat 2.4s ease-in-out infinite;
+        }
+        @keyframes koFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+        .ko-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 6px 10px rgba(0,0,0,0.6));
+        }
+        @keyframes armWave {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(6deg); }
+        }
+        .ko-arm { animation: armWave 1.6s ease-in-out infinite; transform-origin: 95px 55px; }
+        @keyframes bloodPool {
+            0%, 100% { opacity: 0.95; }
+            50% { opacity: 1; }
+        }
+        .blood-pool { animation: bloodPool 2s ease-in-out infinite; }
+
+        .ko-bubble {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: #f5e6c8;
+            color: #3a1a10;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 4px 9px;
+            border-radius: 14px 14px 14px 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            animation: bubblePop 2s ease-in-out infinite;
+            z-index: 3;
+            border: 1px solid #8b3a2a;
+            font-family: "Yu Mincho", serif;
+        }
+        .ko-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 8px;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 0px solid transparent;
+            border-top: 8px solid #f5e6c8;
+        }
+        @keyframes bubblePop {
+            0%, 100% { transform: scale(1) translateY(0); opacity: 1; }
+            50% { transform: scale(1.08) translateY(-3px); opacity: 0.95; }
+        }
+
+        .lantern {
+            position: absolute;
+            top: 55px;
+            width: 26px;
+            height: 38px;
+            background: radial-gradient(circle at 40% 30%, #ff8a5c, #c62828);
+            border-radius: 8px;
+            box-shadow:
+                0 0 20px rgba(255,138,92,0.6),
+                inset 0 0 8px rgba(255,220,180,0.5);
+            z-index: 3;
+            pointer-events: none;
+        }
+        .lantern::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 6px;
+            background: #2a1810;
+            border-radius: 2px;
+        }
+        .lantern::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 10px;
+            background: #d4a86a;
+        }
+        .lantern.left { left: -16px; }
+        .lantern.right { right: -16px; }
+
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 5, 4, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            backdrop-filter: blur(4px);
+            padding: 20px;
+        }
+        .password-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .password-box {
+            background:
+                repeating-linear-gradient(90deg,
+                    #5c3a26 0px, #5c3a26 28px,
+                    #4a2e1d 28px, #4a2e1d 30px),
+                linear-gradient(180deg, #6b4429, #3d2415);
+            border: 3px solid #2a1810;
+            border-radius: 8px;
+            padding: 24px 28px;
+            box-shadow:
+                0 20px 40px rgba(0,0,0,0.8),
+                inset 0 2px 0 rgba(255,220,180,0.15),
+                inset 0 -4px 12px rgba(0,0,0,0.6);
+            max-width: 340px;
+            width: 100%;
+            text-align: center;
+            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes modalPop {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .password-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #ffd966;
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+            font-family: "Yu Mincho", serif;
+            text-shadow: 0 0 15px #ffb800, 0 2px 4px #000;
+        }
+        .password-sub {
+            font-size: 0.75rem;
+            color: #d4a86a;
+            margin-bottom: 16px;
+            font-family: "Yu Mincho", serif;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 2px #000;
+        }
+        .password-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 4px;
+            border: 2px solid #8b3a2a;
+            background: linear-gradient(180deg, #f5e6c8, #e8d4a8);
+            color: #3a1a10;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-align: center;
+            box-shadow:
+                inset 0 2px 6px rgba(139,58,42,0.2),
+                0 2px 4px rgba(0,0,0,0.4);
+            outline: none;
+            font-family: "Yu Mincho", serif;
+            margin-bottom: 14px;
+        }
+        .password-input::placeholder {
+            color: #8b6a5a;
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+        .password-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .password-btn {
+            flex: 1;
+            background: linear-gradient(180deg, #8b3a2a, #6b2a1a);
+            border: 1px solid #d4a86a;
+            border-radius: 4px;
+            padding: 10px 16px;
+            color: #f5e6c8;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 0 #3a1510, 0 6px 12px rgba(0,0,0,0.6);
+            cursor: pointer;
+            transition: all 0.05s ease;
+            touch-action: manipulation;
+            font-family: "Yu Mincho", serif;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 2px #000;
+        }
+        .password-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #3a1510, 0 4px 10px rgba(0,0,0,0.6);
+        }
+        .password-btn.confirm {
+            background: linear-gradient(180deg, #5a7a4a, #3a5a2a);
+            border-color: #a8d48a;
+        }
+        .password-error {
+            color: #ff8a80;
+            font-size: 0.78rem;
+            margin-top: 10px;
+            min-height: 18px;
+            font-family: "Yu Mincho", serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        @media (min-width: 1400px) {
+            .canvas-container { max-height: 75vh; }
+        }
+        @media (max-width: 1023px) {
+            .sidebar.expanded { width: 250px; }
+            .word-list { max-height: 100px; }
+        }
+        @media (max-width: 820px) {
+            .main-layout {
+                padding: 0 12px;
+                gap: 10px;
+            }
+            .sidebar.expanded { width: 230px; }
+            .word-list { max-height: 80px; }
+            .canvas-container { max-height: 60vh; }
+        }
+        @media (max-width: 640px) {
+            .main-layout { padding: 0 10px; margin-top: 26px; gap: 8px; }
+            .sidebar { width: 44px; }
+            .sidebar.expanded { width: 210px; }
+            .sidebar .side-panel { padding: 8px; }
+            .sidebar .side-panel-title { font-size: 0.68rem; margin-bottom: 6px; padding-bottom: 4px; }
+            .canvas-container { max-height: 55vh; }
+            .word-input-area input { padding: 7px 10px; font-size: 0.75rem; }
+            .word-tag { font-size: 0.7rem; padding: 3px 3px 3px 8px; }
+            .word-tag .tag-text { max-width: 90px; }
+            .status-msg { font-size: 0.7rem; }
+            .pool-info { font-size: 0.62rem; }
+            .start-title { font-size: 1.5rem; letter-spacing: 4px; }
+            .start-icon { font-size: 3rem; }
+            .start-sub { font-size: 0.8rem; }
+            .start-hint { font-size: 0.68rem; }
+            .theme-btn { padding: 8px 16px; font-size: 0.78rem; }
+            .pause-btn { width: 40px; height: 40px; font-size: 1.1rem; top: 8px; right: 8px; }
+        }
+        @media (max-width: 480px) {
+            .game-wrapper { padding: 0 0 10px; }
+            .main-layout { padding: 0 6px; margin-top: 24px; gap: 6px; }
+            .health-area { padding: 4px 8px 4px 6px; gap: 4px; }
+            .health-icon { font-size: 0.85rem; }
+            .health-bar-bg { height: 13px; }
+            .health-text { font-size: 0.62rem; min-width: 32px; }
+            .target-box { padding: 5px 8px; min-width: 90px; }
+            .target-hint { font-size: 0.55rem; }
+            .target-word { font-size: 0.9rem; }
+            .target-sub { font-size: 0.5rem; }
+            .gameover-title { font-size: 1.3rem; letter-spacing: 4px; }
+            .ko-container { width: 130px; height: 90px; }
+            .victory-title { font-size: 1.5rem; letter-spacing: 5px; }
+            .victory-sub { font-size: 0.75rem; }
+            .victory-stats { font-size: 0.7rem; padding: 6px 14px; }
+            .lantern { display: none; }
+            .noren-panel { width: 30px; height: 28px; }
+            .noren-text { font-size: 0.55rem; }
+            .roof { height: 30px; }
+            .canvas-container { max-height: 50vh; }
+            .sidebar { width: 40px; }
+            .sidebar.expanded { width: 190px; }
+            .sidebar .side-panel { padding: 7px; }
+            .sidebar .side-panel-title { font-size: 0.65rem; letter-spacing: 1px; }
+            .difficulty-title { font-size: 1.1rem; letter-spacing: 3px; }
+            .difficulty-sub { font-size: 0.7rem; }
+            .difficulty-buttons { max-width: 260px; gap: 10px; }
+            .difficulty-select-btn { font-size: 0.85rem; padding: 10px 14px; letter-spacing: 3px; }
+            .difficulty-select-btn .speed-tag { font-size: 0.6rem; right: 10px; }
+            .word-input-area input { padding: 6px 8px; font-size: 0.72rem; }
+            .word-tag { font-size: 0.65rem; padding: 3px 3px 3px 7px; }
+            .word-tag .tag-text { max-width: 70px; }
+            .word-tag .tag-delete { width: 16px; height: 16px; font-size: 0.65rem; }
+            .status-msg { font-size: 0.68rem; padding: 5px 6px; }
+            .pool-info { font-size: 0.6rem; }
+            .start-title { font-size: 1.3rem; letter-spacing: 3px; }
+            .start-icon { font-size: 2.5rem; }
+            .start-sub { font-size: 0.72rem; }
+            .start-hint { font-size: 0.62rem; padding: 5px 10px; }
+            .speed-display { font-size: 0.75rem; }
+            .speed-display .speed-value { font-size: 0.9rem; }
+            .theme-btn { padding: 7px 14px; font-size: 0.72rem; }
+            .pause-btn { width: 36px; height: 36px; font-size: 1rem; top: 6px; right: 6px; border-width: 1.5px; }
+        }
+        @media (max-width: 360px) {
+            .main-layout { padding: 0 4px; gap: 4px; }
+            .health-text { font-size: 0.58rem; min-width: 28px; }
+            .target-box { min-width: 78px; padding: 4px 6px; }
+            .target-hint { font-size: 0.5rem; }
+            .target-word { font-size: 0.82rem; }
+            .target-sub { display: none; }
+            .canvas-container { max-height: 45vh; }
+            .sidebar { width: 36px; }
+            .sidebar.expanded { width: 170px; }
+            .sidebar .side-panel { padding: 6px; }
+            .sidebar .side-panel-title { font-size: 0.6rem; }
+            .gameover-title { font-size: 1.1rem; letter-spacing: 3px; }
+            .gameover-stats { font-size: 0.65rem; padding: 6px 12px; }
+            .start-title { font-size: 1.1rem; letter-spacing: 2px; }
+            .start-icon { font-size: 2rem; }
+            .theme-btn { padding: 6px 12px; font-size: 0.68rem; }
+            .pause-btn { width: 32px; height: 32px; font-size: 0.9rem; top: 5px; right: 5px; border-width: 1.5px; }
+        }
+        @media (max-height: 500px) and (orientation: landscape) {
+            .main-layout {
+                flex-direction: row;
+                padding: 0 8px;
+                gap: 8px;
+            }
+            .canvas-container { max-height: 80vh; }
+            .roof { height: 24px; }
+            .noren { top: 18px; }
+            .noren-panel { width: 28px; height: 24px; }
+            .noren-text { font-size: 0.5rem; }
+            .main-layout { margin-top: 20px; }
+            .lantern { top: 40px; width: 20px; height: 30px; }
+            .sidebar.expanded { width: 200px; }
+            .pause-btn { width: 34px; height: 34px; font-size: 0.95rem; top: 5px; right: 5px; }
+        }
+        @media (max-height: 700px) and (orientation: landscape) and (min-width: 821px) {
+            .canvas-container { max-height: 72vh; }
+            .main-layout { margin-top: 24px; }
+            .word-list { max-height: 80px; }
+        }
+        @media (hover: none) and (pointer: coarse) {
+            .theme-btn { min-height: 40px; }
+            .difficulty-select-btn { min-height: 44px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="roof"></div>
+
+        <div class="noren">
+            <div class="noren-panel"><span class="noren-text">五段</span></div>
+            <div class="noren-panel"><span class="noren-text">动词</span></div>
+            <div class="noren-panel"><span class="noren-text">道場</span></div>
+        </div>
+
+        <div class="lantern left"></div>
+        <div class="lantern right"></div>
+
+        <div class="main-layout">
+            <div class="game-column">
+                <div class="header">
+                    <div class="health-area" id="healthArea">
+                        <span class="health-icon">❤️</span>
+                        <div class="health-bar-bg">
+                            <div class="health-bar-fill" id="healthBarFill"></div>
+                        </div>
+                        <span class="health-text" id="healthText">5/5</span>
+                    </div>
+                    <div class="target-box" id="targetBox">
+                        <span class="target-hint">⚡ 五段动词判断 ⚡</span>
+                        <span class="target-word">点击五段动词</span>
+                        <span class="target-sub" id="targetSub">漏掉五段动词也扣血</span>
+                    </div>
+                </div>
+
+                <div class="canvas-container" id="canvasContainer">
+                    <canvas id="gameCanvas"></canvas>
+
+                    <button class="pause-btn hidden" id="pauseBtn" aria-label="暂停游戏">
+                        <span class="pause-icon">❚❚</span>
+                    </button>
+
+                    <div class="start-overlay active" id="startOverlay">
+                        <div class="start-icon" id="startIcon">⛩</div>
+                        <div class="start-title" id="startTitle">点击开始</div>
+                        <div class="start-sub" id="startSub">五段动词判断 · 京都道場</div>
+                        <div class="start-hint" id="startHint">点击或触摸屏幕开始游戏</div>
+                    </div>
+
+                    <div class="difficulty-overlay" id="difficultyOverlay">
+                        <div class="difficulty-title" id="difficultyTitle">选择难度</div>
+                        <div class="difficulty-sub" id="difficultySub">单词下落速度逐渐递增</div>
+                        <div class="difficulty-buttons" id="difficultyButtons">
+                            <button class="difficulty-select-btn easy" data-speed="3.0">
+                                简 单<span class="speed-tag">3.0x</span>
+                            </button>
+                            <button class="difficulty-select-btn normal" data-speed="4.0">
+                                普 通<span class="speed-tag">4.0x</span>
+                            </button>
+                            <button class="difficulty-select-btn nightmare" data-speed="5.0">
+                                噩 梦<span class="speed-tag">5.0x</span>
+                            </button>
+                            <button class="difficulty-select-btn hell" data-speed="6.0">
+                                地 狱<span class="speed-tag">6.0x</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="gameover-overlay" id="gameoverOverlay">
+                        <div class="ko-container">
+                            <div class="ko-bubble" id="koBubble">我不行了…</div>
+                            <svg class="ko-svg" viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+                                <path class="blood-pool" d="
+                                    M 20 100
+                                    Q 15 80, 30 70
+                                    Q 45 60, 60 62
+                                    Q 75 55, 90 58
+                                    Q 110 50, 130 55
+                                    Q 150 50, 170 62
+                                    Q 185 70, 182 88
+                                    Q 188 100, 175 112
+                                    Q 160 122, 140 118
+                                    Q 120 126, 100 120
+                                    Q 80 128, 60 122
+                                    Q 40 126, 28 116
+                                    Q 12 112, 20 100 Z"
+                                    fill="#a01a1a" stroke="#7a0f0f" stroke-width="1.5"/>
+                                <path d="M 62 100 Q 45 105, 32 112 Q 28 114, 32 116 Q 48 116, 66 108 Z"
+                                      fill="#ffffff" stroke="#1a1a1a" stroke-width="1.8" stroke-linejoin="round"/>
+                                <path d="M 66 102 Q 55 108, 48 118 Q 46 121, 50 121 Q 62 118, 72 108 Z"
+                                      fill="#ffffff" stroke="#1a1a1a" stroke-width="1.8" stroke-linejoin="round"/>
+                                <circle cx="30" cy="114" r="3" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.5"/>
+                                <circle cx="48" cy="120" r="3" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.5"/>
+                                <ellipse cx="95" cy="82" rx="38" ry="20" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+                                <g class="ko-arm">
+                                    <path d="M 118 72 Q 128 60, 130 50 Q 131 46, 134 48"
+                                          fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+                                </g>
+                                <path d="M 118 72 Q 128 60, 130 50 Q 131 46, 134 48"
+                                      fill="none" stroke="#1a1a1a" stroke-width="6" stroke-linecap="round" opacity="0.9"/>
+                                <path d="M 118 72 Q 128 60, 130 50 Q 131 46, 134 48"
+                                      fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+                                <circle cx="134" cy="47" r="4" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.8"/>
+                                <path d="M 138 42
+                                         Q 138 36, 143 36
+                                         Q 148 36, 148 42
+                                         Q 148 48, 138 54
+                                         Q 128 48, 128 42
+                                         Q 128 36, 133 36
+                                         Q 138 36, 138 42 Z"
+                                      fill="#d32f2f" stroke="#8b1a1a" stroke-width="1.5"/>
+                                <path d="M 100 78
+                                         Q 100 74, 104 74
+                                         Q 108 74, 108 78
+                                         Q 108 82, 100 87
+                                         Q 92 82, 92 78
+                                         Q 92 74, 96 74
+                                         Q 100 74, 100 78 Z"
+                                      fill="#d32f2f" stroke="#8b1a1a" stroke-width="1.2"/>
+                                <circle cx="140" cy="58" r="26" fill="#ffffff" stroke="#1a1a1a" stroke-width="2.2"/>
+                                <circle cx="132" cy="54" r="7" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.5"/>
+                                <circle cx="133" cy="55" r="3" fill="#1a1a1a"/>
+                                <circle cx="153" cy="57" r="6" fill="#1a1a1a"/>
+                                <circle cx="154.5" cy="55.5" r="1.8" fill="#ffffff"/>
+                                <circle cx="145" cy="70" r="2" fill="#1a1a1a"/>
+                            </svg>
+                        </div>
+                        <div class="gameover-title">GAME OVER</div>
+                        <div class="gameover-sub">血量耗尽，游戏结束！</div>
+                        <div class="gameover-stats" id="gameoverStats"></div>
+                        <button class="theme-btn theme-btn-primary" id="restartBigBtn">
+                            <span class="btn-icon">⛩</span>
+                            <span class="btn-text">再来一局</span>
+                        </button>
+                    </div>
+
+                    <div class="victory-overlay" id="victoryOverlay">
+                        <div class="victory-content">
+                            <div class="victory-title">🎉 通关 🎉</div>
+                            <div class="victory-sub">全五段动词掌握！</div>
+                            <div class="victory-stats" id="victoryStats"></div>
+                            <button class="theme-btn theme-btn-gold" id="victoryBtn">
+                                <span class="btn-icon">⛩</span>
+                                <span class="btn-text">再玩一次</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar" id="sidebar">
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="展开/收起设置">
+                    <span class="toggle-icon">⛩</span>
+                    <span class="toggle-label">收起</span>
+                </button>
+                <div class="sidebar-inner" id="sidebarInner">
+                    <div class="side-panel">
+                        <div class="side-panel-title">⚙ 游戏控制</div>
+                        <div class="speed-display">
+                            <span class="speed-label">当前难度</span>
+                            <span class="speed-value" id="currentDifficultyDisplay">简单 3.0x</span>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <button class="theme-btn theme-btn-primary" id="restartBtn" style="width:100%;">
+                                <span class="btn-icon">⛩</span>
+                                <span class="btn-text">重新开始</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="side-panel">
+                        <div class="side-panel-title">✍ 添加单词</div>
+                        <div class="word-input-area">
+                            <input type="text" id="newWordInput" placeholder="输入动词, 例如 食べる" autocomplete="off">
+                            <button class="theme-btn add-btn" id="addWordBtn" style="width:100%;">
+                                <span class="btn-icon">➕</span>
+                                <span class="btn-text">添加</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="side-panel">
+                        <div class="side-panel-title">
+                            <span class="title-text">📚 单词池</span>
+                            <button class="clear-all-btn" id="clearAllBtn" title="清空单词池">清空</button>
+                        </div>
+                        <div class="word-list" id="wordListContainer">
+                            <span class="word-tag empty-tag">单词池空，请添加</span>
+                        </div>
+                        <div class="pool-info" id="poolInfo"></div>
+                    </div>
+
+                    <div class="side-panel" style="padding: 6px;">
+                        <div class="status-msg" id="statusMsg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="password-modal" id="passwordModal">
+        <div class="password-box">
+            <div class="password-title" id="passwordTitle">🔒 需要密码</div>
+            <div class="password-sub" id="passwordSub">请输入密码以继续操作</div>
+            <input type="password" class="password-input" id="passwordInput" placeholder="请输入密码" inputmode="numeric" autocomplete="off">
+            <div class="password-buttons">
+                <button class="password-btn" id="passwordCancel">取消</button>
+                <button class="password-btn confirm" id="passwordConfirm">确定</button>
+            </div>
+            <div class="password-error" id="passwordError"></div>
+        </div>
+    </div>
+
+<script>
+    // 樱花飘落
+    (function createSakura() {
+        const count = 15;
+        for (let i = 0; i < count; i++) {
+            const s = document.createElement('div');
+            s.className = 'sakura';
+            s.style.left = Math.random() * 100 + 'vw';
+            s.style.animationDuration = (8 + Math.random() * 8) + 's';
+            s.style.animationDelay = (Math.random() * 10) + 's';
+            s.style.width = (8 + Math.random() * 8) + 'px';
+            s.style.height = s.style.width;
+            s.style.opacity = 0.5 + Math.random() * 0.5;
+            document.body.appendChild(s);
+        }
+    })();
+
+    (function(){
+        // ================================================================
+        // ★★★ GitHub 同步配置 ★★★
+        // ★★★ 你只需要改下面这一行：把 ghp_请把这里替换... 换成你自己的完整 Token ★★★
+        // ================================================================
+        const GITHUB_OWNER = 'icebreaker0414';
+        const GITHUB_REPO = 'dodan-words';
+        const GITHUB_PATH = 'words.json';
+        const GITHUB_API = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`;
+
+        // 👇👇👇 这一行改成你自己的 Token（ghp_ 开头，一共 40 位字符） 👇👇👇
+        const GITHUB_TOKEN = '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';
+        // 👆👆👆 改这一行就行，别的不用动 👆👆👆
+
+        function getToken() {
+            return GITHUB_TOKEN;
+        }
+
+        // ================================================================
+        // 默认词库（仅当 GitHub 拉取失败时使用）
+        // ================================================================
+        const DEFAULT_GODAN_VERBS = [
+            "行く", "買う", "探す", "使う", "知る", "取る", "言う", "飲む",
+            "持つ", "読む", "やる", "洗う", "書く", "歌う", "分かる"
+        ];
+
+        const DEFAULT_NON_GODAN_VERBS = [
+            "出来る", "食べる", "答える", "寝る", "着る", "入れる", "挙げる", "始める", "忘れる", "出る",
+            "する", "勉強する", "買い物する",
+            "来る",
+            "教室", "今", "明日", "人々",
+            "そして",
+            "早い", "高い"
+        ];
+
+        const GODAN_VERBS = [...DEFAULT_GODAN_VERBS];
+        const GODAN_SET = new Set(GODAN_VERBS);
+
+        // ================================================================
+        // loadWordPool / saveWordPool
+        // ================================================================
+        async function loadWordPool() {
+            const token = getToken();
+            if (!token || token.indexOf('请把这里') !== -1) {
+                console.warn('[loadWordPool] 没有配置 token，使用默认词库');
+                return [...DEFAULT_GODAN_VERBS, ...DEFAULT_NON_GODAN_VERBS];
+            }
+            try {
+                const res = await fetch(GITHUB_API, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                if (!res.ok) {
+                    const errTxt = await res.text();
+                    throw new Error('GitHub 读取失败: ' + res.status + ' ' + errTxt);
+                }
+                const data = await res.json();
+
+                // UTF-8 安全 base64 解码
+                const binary = atob(data.content.replace(/\n/g, ''));
+                const bytes = new Uint8Array(binary.length);
+                for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                const decoded = new TextDecoder('utf-8').decode(bytes);
+
+                const words = JSON.parse(decoded);
+                if (Array.isArray(words)) {
+                    if (words.length > 0) return words;
+                    // 空数组也返回，让 UI 显示“空”
+                    console.warn('[loadWordPool] GitHub 上是空数组，返回空数组');
+                    return [];
+                }
+            } catch (e) {
+                console.warn('[loadWordPool] 从 GitHub 加载失败，回退默认词库:', e);
+            }
+            return [...DEFAULT_GODAN_VERBS, ...DEFAULT_NON_GODAN_VERBS];
+        }
+
+        async function saveWordPool() {
+            const token = getToken();
+            if (!token || token.indexOf('请把这里') !== -1) {
+                showStatus('⚠ 没有配置 Token，无法同步', false);
+                return false;
+            }
+            try {
+                // 1. 拿 sha
+                const getRes = await fetch(GITHUB_API, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                if (!getRes.ok) throw new Error('获取文件信息失败: ' + getRes.status);
+                const getData = await getRes.json();
+                const sha = getData.sha;
+
+                // 2. UTF-8 安全 base64 编码
+                const json = JSON.stringify(ORIGINAL_POOL, null, 2);
+                const bytes = new TextEncoder().encode(json);
+                let binary = '';
+                bytes.forEach(b => binary += String.fromCharCode(b));
+                const content = btoa(binary);
+
+                // 3. PUT
+                const putRes = await fetch(GITHUB_API, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `更新单词池 ${new Date().toISOString()}`,
+                        content: content,
+                        sha: sha
+                    })
+                });
+                if (!putRes.ok) {
+                    const errText = await putRes.text();
+                    throw new Error('写入失败: ' + putRes.status + ' ' + errText);
+                }
+                return true;
+            } catch (e) {
+                console.warn('[saveWordPool] 保存失败:', e);
+                showStatus('⚠ 同步失败：' + e.message, false);
+                return false;
+            }
+        }
+
+        let ORIGINAL_POOL = [];
+
+        // ================================================================
+        // 密码
+        // ================================================================
+        const ADMIN_PASSWORD = '0725';
+
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        const MAX_HEALTH = 5;
+        let currentHealth = MAX_HEALTH;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let missCount = 0;
+        let gameOver = false;
+        let gameVictory = false;
+
+        let gameStarted = false;
+        let gamePaused = false;
+        let difficultyChosen = false;
+
+        let masteredGodan = new Set();
+
+        let spawnQueue = [];
+        let spawnIndex = 0;
+
+        let activeWords = [];
+        let slicedPieces = [];
+        let bladeTrails = [];
+        let explosions = [];
+        let baseSpeedFactor = 3.0;
+
+        const BASE_FALL_SPEED = 55;
+
+        const WORD_FONT_SIZE = 30;
+        const WORD_PADDING = 26;
+        const WORD_HEIGHT = 52;
+
+        let floatingTexts = [];
+        let fireworks = [];
+        let fireworkSparks = [];
+        let clouds = [];
+        const CLOUD_SPEED = 4;
+
+        let sakuraSwayTime = 0;
+        const SAKURA_SWAY_SPEED = 0.8;
+
+        let animationFrame = null;
+        let lastTimestamp = 0;
+        let spawnTimer = 0;
+        const SPAWN_INTERVAL = 2.6;
+        let gameRunning = true;
+
+        const characterState = {
+            samurai: { state: 'idle', timer: 0, jumpProgress: 0, slashTriggered: false },
+            dragon: { state: 'idle', timer: 0 },
+            slashEffects: [],
+            fireEffects: [],
+        };
+
+        const GROUND_RATIO = 0.86;
+        const SAMURAI_X_RATIO = 0.20;
+        const DRAGON_X_RATIO = 0.80;
+        const CHARACTER_SCALE_DIVISOR = 400;
+
+        const JUMP_DURATION = 0.35;
+        const SLASH_MOMENT = 0.12;
+        const RETURN_DURATION = 0.4;
+        const TOTAL_JUMP_ATTACK = JUMP_DURATION + SLASH_MOMENT + RETURN_DURATION;
+        const FIRE_DURATION = 0.7;
+        const HURT_DURATION = 0.4;
+
+        // ---------- 音效 ----------
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch(e) {}
+            }
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function playCorrectSound() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const bufferSize = audioCtx.sampleRate * 0.15;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2);
+                }
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'highpass';
+                filter.frequency.setValueAtTime(2000, now);
+                filter.frequency.exponentialRampToValueAtTime(6000, now + 0.1);
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+                noise.start(now); noise.stop(now + 0.15);
+            } catch(e) {}
+        }
+
+        function playExplosionSound() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const crackBufferSize = audioCtx.sampleRate * 0.08;
+                const crackBuffer = audioCtx.createBuffer(1, crackBufferSize, audioCtx.sampleRate);
+                const crackData = crackBuffer.getChannelData(0);
+                for (let i = 0; i < crackBufferSize; i++) {
+                    crackData[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / crackBufferSize, 4);
+                }
+                const crack = audioCtx.createBufferSource();
+                crack.buffer = crackBuffer;
+                const crackFilter = audioCtx.createBiquadFilter();
+                crackFilter.type = 'highpass';
+                crackFilter.frequency.setValueAtTime(3500, now);
+                crackFilter.frequency.exponentialRampToValueAtTime(9000, now + 0.05);
+                const crackGain = audioCtx.createGain();
+                crackGain.gain.setValueAtTime(0.5, now);
+                crackGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                crack.connect(crackFilter); crackFilter.connect(crackGain); crackGain.connect(audioCtx.destination);
+                crack.start(now); crack.stop(now + 0.08);
+
+                const burstBufferSize = audioCtx.sampleRate * 0.25;
+                const burstBuffer = audioCtx.createBuffer(1, burstBufferSize, audioCtx.sampleRate);
+                const burstData = burstBuffer.getChannelData(0);
+                for (let i = 0; i < burstBufferSize; i++) {
+                    burstData[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / burstBufferSize, 2.2);
+                }
+                const burst = audioCtx.createBufferSource();
+                burst.buffer = burstBuffer;
+                const burstFilter = audioCtx.createBiquadFilter();
+                burstFilter.type = 'bandpass';
+                burstFilter.frequency.setValueAtTime(2500, now);
+                burstFilter.frequency.exponentialRampToValueAtTime(800, now + 0.2);
+                burstFilter.Q.setValueAtTime(1.5, now);
+                const burstGain = audioCtx.createGain();
+                burstGain.gain.setValueAtTime(0.45, now);
+                burstGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                burst.connect(burstFilter); burstFilter.connect(burstGain); burstGain.connect(audioCtx.destination);
+                burst.start(now); burst.stop(now + 0.25);
+
+                const osc = audioCtx.createOscillator();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(2800, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.12);
+                const oscGain = audioCtx.createGain();
+                oscGain.gain.setValueAtTime(0.18, now);
+                oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                osc.connect(oscGain); oscGain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.15);
+
+                const lowOsc = audioCtx.createOscillator();
+                lowOsc.type = 'sine';
+                lowOsc.frequency.setValueAtTime(180, now);
+                lowOsc.frequency.exponentialRampToValueAtTime(60, now + 0.18);
+                const lowGain = audioCtx.createGain();
+                lowGain.gain.setValueAtTime(0.15, now);
+                lowGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                lowOsc.connect(lowGain); lowGain.connect(audioCtx.destination);
+                lowOsc.start(now); lowOsc.stop(now + 0.2);
+            } catch(e) {}
+        }
+
+        function playMissSound() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(80, now + 0.3);
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.35);
+            } catch(e) {}
+        }
+
+        function playGameOverSound() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(80, now + 0.8);
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.9);
+            } catch(e) {}
+        }
+
+        function playVictorySound() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    osc.type = 'triangle';
+                    const t = now + idx * 0.18;
+                    osc.frequency.setValueAtTime(freq, t);
+                    const gain = audioCtx.createGain();
+                    gain.gain.setValueAtTime(0.001, t);
+                    gain.gain.linearRampToValueAtTime(0.25, t + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(t); osc.stop(t + 0.5);
+                });
+            } catch(e) {}
+        }
+
+        function playFireworkSound() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const bufferSize = audioCtx.sampleRate * 0.4;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2.5);
+                }
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(1200, now);
+                filter.frequency.exponentialRampToValueAtTime(300, now + 0.4);
+                filter.Q.setValueAtTime(1.2, now);
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+                noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+                noise.start(now); noise.stop(now + 0.45);
+            } catch(e) {}
+        }
+
+        function playJumpSound() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(900, now + 0.15);
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.18);
+            } catch(e) {}
+        }
+
+        function playSlashSound() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(1800, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.1);
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.15);
+
+                const bufferSize = audioCtx.sampleRate * 0.08;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2);
+                }
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(3000, now);
+                const noiseGain = audioCtx.createGain();
+                noiseGain.gain.setValueAtTime(0.15, now);
+                noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                noise.connect(filter); filter.connect(noiseGain); noiseGain.connect(audioCtx.destination);
+                noise.start(now); noise.stop(now + 0.08);
+            } catch(e) {}
+        }
+
+        function playFireSound() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.exponentialRampToValueAtTime(60, now + 0.5);
+                const oscGain = audioCtx.createGain();
+                oscGain.gain.setValueAtTime(0.25, now);
+                oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+                osc.connect(oscGain); oscGain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.55);
+
+                const bufferSize = audioCtx.sampleRate * 0.5;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 1.2);
+                }
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(900, now);
+                filter.frequency.exponentialRampToValueAtTime(150, now + 0.5);
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.35, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+                noise.start(now); noise.stop(now + 0.5);
+            } catch(e) {}
+        }
+
+        // ---------- 尺寸 ----------
+        let canvasWidth = 640, canvasHeight = 400;
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvasContainer');
+
+        function resizeCanvas() {
+            const rect = container.getBoundingClientRect();
+            if (rect.width > 0 && rect.height > 0) {
+                const dpr = window.devicePixelRatio || 1;
+                canvasWidth = Math.floor(rect.width);
+                canvasHeight = Math.floor(rect.height);
+                canvas.width = Math.floor(rect.width * dpr);
+                canvas.height = Math.floor(rect.height * dpr);
+                canvas.style.width = rect.width + 'px';
+                canvas.style.height = rect.height + 'px';
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+        }
+        window.addEventListener('resize', () => resizeCanvas());
+        window.addEventListener('orientationchange', () => {
+            setTimeout(resizeCanvas, 200);
+        });
+
+        const healthBarFill = document.getElementById('healthBarFill');
+        const healthText = document.getElementById('healthText');
+        const targetSub = document.getElementById('targetSub');
+        const restartBtn = document.getElementById('restartBtn');
+        const restartBigBtn = document.getElementById('restartBigBtn');
+        const addWordBtn = document.getElementById('addWordBtn');
+        const newWordInput = document.getElementById('newWordInput');
+        const wordListContainer = document.getElementById('wordListContainer');
+        const statusMsg = document.getElementById('statusMsg');
+        const poolInfo = document.getElementById('poolInfo');
+        const gameoverOverlay = document.getElementById('gameoverOverlay');
+        const gameoverStats = document.getElementById('gameoverStats');
+        const koBubble = document.getElementById('koBubble');
+        const victoryOverlay = document.getElementById('victoryOverlay');
+        const victoryStats = document.getElementById('victoryStats');
+        const victoryBtn = document.getElementById('victoryBtn');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        const startOverlay = document.getElementById('startOverlay');
+        const startIcon = document.getElementById('startIcon');
+        const startTitle = document.getElementById('startTitle');
+        const startSub = document.getElementById('startSub');
+        const startHint = document.getElementById('startHint');
+
+        const pauseBtn = document.getElementById('pauseBtn');
+
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+
+        sidebarToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle('expanded');
+        });
+        sidebarToggle.addEventListener('touchstart', (e) => {
+            e.stopPropagation();
+        }, { passive: true });
+
+        const difficultyOverlay = document.getElementById('difficultyOverlay');
+        const difficultyButtons = document.getElementById('difficultyButtons');
+        const currentDifficultyDisplay = document.getElementById('currentDifficultyDisplay');
+
+        const passwordModal = document.getElementById('passwordModal');
+        const passwordTitle = document.getElementById('passwordTitle');
+        const passwordSub = document.getElementById('passwordSub');
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordCancel = document.getElementById('passwordCancel');
+        const passwordConfirm = document.getElementById('passwordConfirm');
+        const passwordError = document.getElementById('passwordError');
+
+        const KO_MESSAGES = [
+            "我不行了…", "呃啊…", "救…命…", "噗…", "倒…了…",
+            "好难…", "投降…", "呜…", "挂…了…", "别…学…了…"
+        ];
+
+        const DIFFICULTY_NAMES = {
+            '3.0': '简单',
+            '4.0': '普通',
+            '5.0': '噩梦',
+            '6.0': '地狱'
+        };
+
+        function showDifficultyOverlay() {
+            difficultyOverlay.classList.add('active');
+        }
+
+        function hideDifficultyOverlay() {
+            difficultyOverlay.classList.remove('active');
+        }
+
+        function selectDifficulty(speed) {
+            baseSpeedFactor = speed;
+            const name = DIFFICULTY_NAMES[speed.toFixed(1)] || '简单';
+            currentDifficultyDisplay.textContent = `${name} ${speed.toFixed(1)}x`;
+            hideDifficultyOverlay();
+
+            activeWords.forEach(w => {
+                w.speed = BASE_FALL_SPEED * baseSpeedFactor;
+            });
+
+            startGameAfterDifficulty();
+        }
+
+        difficultyButtons.querySelectorAll('.difficulty-select-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const speed = parseFloat(btn.dataset.speed);
+                selectDifficulty(speed);
+            });
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const speed = parseFloat(btn.dataset.speed);
+                selectDifficulty(speed);
+            }, { passive: false });
+        });
+
+        // ================================================================
+        // 密码验证
+        // ================================================================
+        let pendingAction = null;
+
+        function requestPassword(title, sub, callback) {
+            pendingAction = callback;
+            passwordTitle.textContent = title || '🔒 需要密码';
+            passwordSub.textContent = sub || '请输入密码以继续操作';
+            passwordInput.value = '';
+            passwordError.textContent = '';
+            passwordModal.classList.add('active');
+            setTimeout(() => {
+                passwordInput.focus();
+            }, 100);
+        }
+
+        function closePasswordModal() {
+            passwordModal.classList.remove('active');
+            passwordInput.value = '';
+            passwordError.textContent = '';
+            pendingAction = null;
+        }
+
+        function confirmPassword() {
+            const entered = passwordInput.value.trim();
+            if (entered === ADMIN_PASSWORD) {
+                const action = pendingAction;
+                closePasswordModal();
+                if (action) {
+                    setTimeout(() => action(), 100);
+                }
+            } else {
+                passwordError.textContent = '❌ 密码错误，请重试';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+
+        passwordCancel.addEventListener('click', closePasswordModal);
+        passwordConfirm.addEventListener('click', confirmPassword);
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                confirmPassword();
+            }
+        });
+        passwordModal.addEventListener('click', (e) => {
+            if (e.target === passwordModal) {
+                closePasswordModal();
+            }
+        });
+
+        function initClouds() {
+            clouds = [];
+            const cloudCount = 6;
+            for (let i = 0; i < cloudCount; i++) {
+                clouds.push({
+                    x: Math.random() * (canvasWidth + 200) - 100,
+                    y: canvasHeight * (0.15 + Math.random() * 0.35),
+                    width: 50 + Math.random() * 70,
+                    height: 8 + Math.random() * 10,
+                    speed: CLOUD_SPEED * (0.6 + Math.random() * 0.8),
+                    alpha: 0.35 + Math.random() * 0.3,
+                });
+            }
+        }
+
+        function updateClouds(deltaSec) {
+            clouds.forEach(c => {
+                c.x += c.speed * deltaSec;
+                if (c.x > canvasWidth + c.width) {
+                    c.x = -c.width - 20;
+                    c.y = canvasHeight * (0.15 + Math.random() * 0.35);
+                    c.width = 50 + Math.random() * 70;
+                    c.height = 8 + Math.random() * 10;
+                    c.alpha = 0.35 + Math.random() * 0.3;
+                }
+            });
+        }
+
+        function updateHealthUI() {
+            const percent = (currentHealth / MAX_HEALTH) * 100;
+            healthBarFill.style.width = percent + '%';
+            healthText.textContent = `${currentHealth}/${MAX_HEALTH}`;
+            if (currentHealth <= 2) {
+                healthBarFill.classList.add('low');
+            } else {
+                healthBarFill.classList.remove('low');
+            }
+        }
+
+        function updatePoolInfo() {
+            const godanCount = ORIGINAL_POOL.filter(w => GODAN_SET.has(w)).length;
+            const otherCount = ORIGINAL_POOL.length - godanCount;
+            poolInfo.textContent = `📚 词池: ${ORIGINAL_POOL.length} 个 (五段 ${godanCount} / 非五段 ${otherCount})`;
+        }
+
+        function updateWordListDisplay() {
+            wordListContainer.innerHTML = '';
+            if (ORIGINAL_POOL.length === 0) {
+                const emptySpan = document.createElement('span');
+                emptySpan.className = 'word-tag empty-tag';
+                emptySpan.textContent = '单词池空，请添加';
+                wordListContainer.appendChild(emptySpan);
+                updatePoolInfo();
+                return;
+            }
+            const displayLimit = Math.min(ORIGINAL_POOL.length, 100);
+            for (let i = 0; i < displayLimit; i++) {
+                const word = ORIGINAL_POOL[i];
+                const tag = document.createElement('span');
+                const isGodan = GODAN_SET.has(word);
+                tag.className = 'word-tag ' + (isGodan ? 'godan-tag' : 'other-tag');
+
+                const textSpan = document.createElement('span');
+                textSpan.className = 'tag-text';
+                textSpan.textContent = word;
+                tag.appendChild(textSpan);
+
+                const delBtn = document.createElement('button');
+                delBtn.className = 'tag-delete';
+                delBtn.textContent = '×';
+                delBtn.title = '删除「' + word + '」';
+                delBtn.setAttribute('aria-label', '删除单词');
+                delBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    requestDeleteWord(word);
+                });
+                tag.appendChild(delBtn);
+
+                wordListContainer.appendChild(tag);
+            }
+            if (ORIGINAL_POOL.length > displayLimit) {
+                const moreSpan = document.createElement('span');
+                moreSpan.className = 'word-tag empty-tag';
+                moreSpan.textContent = `... 还有 ${ORIGINAL_POOL.length - displayLimit} 个`;
+                wordListContainer.appendChild(moreSpan);
+            }
+            updatePoolInfo();
+        }
+
+        function requestDeleteWord(word) {
+            requestPassword(
+                '🔒 删除单词',
+                `确定删除「${word}」？请输入密码`,
+                () => removeWord(word)
+            );
+        }
+
+        function removeWord(word) {
+            const idx = ORIGINAL_POOL.indexOf(word);
+            if (idx === -1) return;
+            ORIGINAL_POOL.splice(idx, 1);
+            spawnQueue = spawnQueue.filter(w => w !== word);
+            updateWordListDisplay();
+            showStatus(`🗑 已删除「${word}」，正在同步…`, true);
+            saveWordPool().then(ok => {
+                if (ok) showStatus(`✅ 已同步删除「${word}」`, true);
+            });
+        }
+
+        function requestClearAll() {
+            if (ORIGINAL_POOL.length === 0) {
+                showStatus('单词池已经是空的', false);
+                return;
+            }
+            requestPassword(
+                '🔒 清空单词池',
+                `确定清空所有 ${ORIGINAL_POOL.length} 个单词？`,
+                () => {
+                    ORIGINAL_POOL.length = 0;
+                    spawnQueue = [];
+                    updateWordListDisplay();
+                    showStatus('🗑 已清空，正在同步…', true);
+                    saveWordPool().then(ok => {
+                        if (ok) showStatus('✅ 已同步清空', true);
+                    });
+                }
+            );
+        }
+
+        let msgTimeout = null;
+        function showStatus(text, isGood = true) {
+            statusMsg.textContent = text;
+            statusMsg.style.color = isGood ? '#8fbc5a' : '#ff8a80';
+            if (msgTimeout) clearTimeout(msgTimeout);
+            msgTimeout = setTimeout(() => { statusMsg.textContent = ''; }, 2500);
+        }
+
+        function addFloatingText(text, x, y, color) {
+            floatingTexts.push({
+                text: text, x: x, y: y,
+                vy: -55, vx: (Math.random() - 0.5) * 15,
+                life: 1.0, decay: 0.9,
+                color: color || '#ff3b3b', size: 32,
+            });
+        }
+
+        const FIREWORK_COLORS = [
+            '#ff5252', '#ffb800', '#ffd966', '#8fbc5a',
+            '#4fc3f7', '#ba68c8', '#ff8a80', '#fff59d',
+            '#ff7043', '#e1bee7'
+        ];
+
+        function launchFirework() {
+            const startX = canvasWidth * (0.15 + Math.random() * 0.7);
+            const targetY = canvasHeight * (0.1 + Math.random() * 0.35);
+            fireworks.push({
+                x: startX, y: canvasHeight + 10, targetY: targetY,
+                vy: -180 - Math.random() * 80, vx: (Math.random() - 0.5) * 30,
+                life: 1.0, trail: [],
+                color: FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)],
+                exploded: false,
+            });
+        }
+
+        function explodeFirework(fw) {
+            const count = 30 + Math.floor(Math.random() * 16);
+            const mainColor = fw.color;
+            const secondColor = FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)];
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.3;
+                const speed = 60 + Math.random() * 120;
+                fireworkSparks.push({
+                    x: fw.x, y: fw.y,
+                    vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+                    life: 1.0, decay: 0.7 + Math.random() * 0.5,
+                    color: Math.random() > 0.4 ? mainColor : secondColor,
+                    size: 1.5 + Math.random() * 2.5, gravity: 25,
+                });
+            }
+            for (let i = 0; i < 8; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 20 + Math.random() * 40;
+                fireworkSparks.push({
+                    x: fw.x, y: fw.y,
+                    vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+                    life: 1.0, decay: 1.2, color: '#ffffff',
+                    size: 2 + Math.random() * 3, gravity: 20,
+                });
+            }
+            playFireworkSound();
+        }
+
+        function updateFireworks(deltaSec) {
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                const fw = fireworks[i];
+                fw.x += fw.vx * deltaSec;
+                fw.y += fw.vy * deltaSec;
+                fw.vy += 30 * deltaSec;
+                fw.trail.push({ x: fw.x, y: fw.y, life: 1.0 });
+                if (fw.trail.length > 12) fw.trail.shift();
+                fw.trail.forEach(t => t.life -= 2.5 * deltaSec);
+
+                if (fw.y <= fw.targetY || fw.vy > -30) {
+                    explodeFirework(fw);
+                    fireworks.splice(i, 1);
+                }
+            }
+
+            for (let i = fireworkSparks.length - 1; i >= 0; i--) {
+                const sp = fireworkSparks[i];
+                sp.x += sp.vx * deltaSec;
+                sp.y += sp.vy * deltaSec;
+                sp.vy += sp.gravity * deltaSec;
+                sp.vx *= 0.985;
+                sp.vy *= 0.985;
+                sp.life -= sp.decay * deltaSec;
+                if (sp.life <= 0) fireworkSparks.splice(i, 1);
+            }
+        }
+
+        function drawFireworks() {
+            fireworks.forEach(fw => {
+                fw.trail.forEach((t, idx) => {
+                    if (t.life <= 0) return;
+                    ctx.save();
+                    ctx.globalAlpha = t.life * 0.6;
+                    ctx.beginPath();
+                    ctx.arc(t.x, t.y, 2 * t.life, 0, Math.PI * 2);
+                    ctx.fillStyle = fw.color;
+                    ctx.shadowColor = fw.color;
+                    ctx.shadowBlur = 10;
+                    ctx.fill();
+                    ctx.restore();
+                });
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(fw.x, fw.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.shadowColor = fw.color;
+                ctx.shadowBlur = 16;
+                ctx.fill();
+                ctx.restore();
+            });
+
+            fireworkSparks.forEach(sp => {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, sp.life);
+                ctx.beginPath();
+                ctx.arc(sp.x, sp.y, sp.size * sp.life, 0, Math.PI * 2);
+                ctx.fillStyle = sp.color;
+                ctx.shadowColor = sp.color;
+                ctx.shadowBlur = 12;
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+
+        function triggerVictory() {
+            gameVictory = true;
+            gameOver = true;
+            gameRunning = false;
+            activeWords = [];
+            slicedPieces = [];
+            bladeTrails = [];
+            explosions = [];
+            floatingTexts = [];
+            playVictorySound();
+
+            pauseBtn.classList.add('hidden');
+
+            const total = correctCount + wrongCount + missCount;
+            const accuracy = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+            victoryStats.innerHTML = `
+                🏆 五段动词掌握: <span class="correct-count">${masteredGodan.size} / ${GODAN_VERBS.length}</span><br>
+                ✅ 总正确: <span class="correct-count">${correctCount} 题</span><br>
+                ❌ 总选错: <span class="wrong-count" style="color:#ff8a80;font-weight:700;">${wrongCount} 题</span><br>
+                ⏰ 总漏掉: <span class="miss-count">${missCount} 题</span><br>
+                🎯 正确率: <span style="color:#ffd966;font-weight:700;">${accuracy}%</span>
+            `;
+
+            victoryOverlay.classList.add('active');
+
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => { if (gameVictory) launchFirework(); }, i * 200);
+            }
+        }
+
+        let fireworkTimer = 0;
+        function autoLaunchFireworks(deltaSec) {
+            if (!gameVictory) return;
+            fireworkTimer += deltaSec;
+            if (fireworkTimer > 0.6) {
+                fireworkTimer = 0;
+                launchFirework();
+            }
+        }
+
+        function triggerGameOver() {
+            gameOver = true;
+            gameRunning = false;
+            activeWords = [];
+            slicedPieces = [];
+            bladeTrails = [];
+            explosions = [];
+            floatingTexts = [];
+            playGameOverSound();
+
+            pauseBtn.classList.add('hidden');
+
+            const total = correctCount + wrongCount + missCount;
+            const accuracy = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+            gameoverStats.innerHTML = `
+                ✅ 正确: <span class="correct-count">${correctCount} 题</span><br>
+                ❌ 选错: <span class="wrong-count">${wrongCount} 题</span><br>
+                ⏰ 漏掉: <span class="miss-count">${missCount} 题</span><br>
+                🎯 正确率: <span style="color:#ffd966;font-weight:700;">${accuracy}%</span>
+            `;
+
+            const koMsg = KO_MESSAGES[Math.floor(Math.random() * KO_MESSAGES.length)];
+            koBubble.textContent = koMsg;
+
+            gameoverOverlay.classList.add('active');
+        }
+
+        function spawnWord() {
+            if (!gameRunning || gameOver) return;
+            if (spawnQueue.length === 0) return;
+
+            const text = spawnQueue[spawnIndex % spawnQueue.length];
+            spawnIndex++;
+
+            ctx.font = `bold ${WORD_FONT_SIZE}px "Yu Mincho", "Hiragino Mincho ProN", serif`;
+            const metrics = ctx.measureText(text);
+            const textWidth = metrics.width;
+            const wordWidth = textWidth + WORD_PADDING;
+
+            const maxX = Math.max(10, canvasWidth - wordWidth - 10);
+            const x = Math.random() * maxX + 5;
+            const y = -WORD_HEIGHT - Math.random() * 20;
+
+            const speed = BASE_FALL_SPEED * baseSpeedFactor;
+
+            activeWords.push({
+                id: Date.now() + Math.random() + Math.random(),
+                text, x, y, width: wordWidth, height: WORD_HEIGHT, speed,
+                textWidth, padding: WORD_PADDING,
+            });
+        }
+
+        function sliceWord(wordObj, isCorrect, clickX, clickY) {
+            const { x, y, width, height, text } = wordObj;
+            const centerX = x + width / 2;
+            const centerY = y + height / 2;
+            const halfW = width / 2;
+
+            const baseColor = isCorrect ? '#8fbc5a' : '#c04a35';
+            const darkColor = isCorrect ? '#5a7a3a' : '#8b2a1a';
+
+            const dx = clickX - centerX;
+            const dy = clickY - centerY;
+            const cutAngle = Math.atan2(dy, dx);
+
+            const perpX = -Math.sin(cutAngle);
+            const perpY = Math.cos(cutAngle);
+            const sepSpeed = 4.5;
+
+            slicedPieces.push({
+                x, y, width: halfW, height,
+                fullWidth: width, fullHeight: height, text, side: 'left',
+                vx: perpX * sepSpeed + (Math.random() - 0.5) * 1.5,
+                vy: perpY * sepSpeed + (Math.random() - 0.5) * 1.5 - 2,
+                rotation: 0, rotSpeed: -0.08 - Math.random() * 0.08,
+                baseColor, darkColor, life: 1.0, decay: 0.014 + Math.random() * 0.008,
+                gravity: 0.14,
+            });
+            slicedPieces.push({
+                x: x + halfW, y, width: halfW, height,
+                fullWidth: width, fullHeight: height, text, side: 'right',
+                vx: -perpX * sepSpeed + (Math.random() - 0.5) * 1.5,
+                vy: -perpY * sepSpeed + (Math.random() - 0.5) * 1.5 - 2,
+                rotation: 0, rotSpeed: 0.08 + Math.random() * 0.08,
+                baseColor, darkColor, life: 1.0, decay: 0.014 + Math.random() * 0.008,
+                gravity: 0.14,
+            });
+
+            for (let i = 0; i < 5; i++) {
+                bladeTrails.push({
+                    x: clickX + (Math.random() - 0.5) * 30,
+                    y: clickY + (Math.random() - 0.5) * 30,
+                    angle: cutAngle + (Math.random() - 0.5) * 0.3,
+                    length: 50 + Math.random() * 60,
+                    width: 2 + Math.random() * 4,
+                    life: 1.0, decay: 0.06 + Math.random() * 0.04,
+                    color: isCorrect ? '#ffffff' : '#ffaa44',
+                });
+            }
+
+            if (!isCorrect) {
+                playExplosionSound();
+                for (let i = 0; i < 35; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = 2 + Math.random() * 8;
+                    explosions.push({
+                        x: centerX, y: centerY,
+                        vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 1,
+                        life: 1.0, decay: 0.018 + Math.random() * 0.018,
+                        size: 3 + Math.random() * 7,
+                        color: Math.random() > 0.5 ? '#ff6b3d' : '#ffd93d',
+                        gravity: 0.18,
+                    });
+                }
+                for (let i = 0; i < 15; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = 1 + Math.random() * 5;
+                    explosions.push({
+                        x: centerX, y: centerY,
+                        vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 1.5,
+                        life: 1.0, decay: 0.012 + Math.random() * 0.012,
+                        size: 5 + Math.random() * 10,
+                        color: Math.random() > 0.5 ? '#ff3b1f' : '#ffb800',
+                        gravity: 0.15,
+                    });
+                }
+            } else {
+                for (let i = 0; i < 10; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = 1 + Math.random() * 4;
+                    explosions.push({
+                        x: centerX, y: centerY,
+                        vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 1,
+                        life: 1.0, decay: 0.03 + Math.random() * 0.02,
+                        size: 2 + Math.random() * 4,
+                        color: '#ffffff', gravity: 0.1,
+                    });
+                }
+            }
+        }
+
+        function triggerSamuraiJumpAttack() {
+            characterState.samurai.state = 'jumpAttack';
+            characterState.samurai.timer = TOTAL_JUMP_ATTACK;
+            characterState.samurai.jumpProgress = 0;
+            characterState.samurai.slashTriggered = false;
+            playJumpSound();
+        }
+
+        function triggerSlashMoment() {
+            characterState.dragon.state = 'hurt';
+            characterState.dragon.timer = HURT_DURATION;
+
+            const dx = canvasWidth * DRAGON_X_RATIO;
+            const dy = canvasHeight * GROUND_RATIO - 40;
+            for (let i = 0; i < 10; i++) {
+                characterState.slashEffects.push({
+                    x: dx + (Math.random() - 0.5) * 40,
+                    y: dy + (Math.random() - 0.5) * 40,
+                    angle: Math.random() * Math.PI,
+                    life: 1.0, decay: 0.05 + Math.random() * 0.04,
+                    length: 30 + Math.random() * 50,
+                });
+            }
+            for (let i = 0; i < 15; i++) {
+                const a = Math.random() * Math.PI * 2;
+                const sp = 2 + Math.random() * 5;
+                explosions.push({
+                    x: dx, y: dy,
+                    vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 1,
+                    life: 1.0, decay: 0.025 + Math.random() * 0.02,
+                    size: 3 + Math.random() * 6,
+                    color: Math.random() > 0.5 ? '#ffdd88' : '#ffffff',
+                    gravity: 0.15,
+                });
+            }
+            playSlashSound();
+        }
+
+        function triggerDragonAttack() {
+            characterState.dragon.state = 'attack';
+            characterState.dragon.timer = FIRE_DURATION;
+            characterState.samurai.state = 'hurt';
+            characterState.samurai.timer = HURT_DURATION;
+
+            const dx = canvasWidth * DRAGON_X_RATIO;
+            const dy = canvasHeight * GROUND_RATIO - 50;
+            const sx = canvasWidth * SAMURAI_X_RATIO;
+            const sy = canvasHeight * GROUND_RATIO - 30;
+
+            for (let i = 0; i < 40; i++) {
+                const t = i / 40;
+                const px = dx + (sx - dx) * t + (Math.random() - 0.5) * 50;
+                const py = dy + (sy - dy) * t + (Math.random() - 0.5) * 30;
+                characterState.fireEffects.push({
+                    x: px, y: py,
+                    vx: (Math.random() - 0.5) * 2, vy: -1.5 - Math.random() * 2,
+                    life: 1.0, decay: 0.016 + Math.random() * 0.012,
+                    size: 6 + Math.random() * 14,
+                });
+            }
+            for (let i = 0; i < 8; i++) {
+                characterState.fireEffects.push({
+                    x: dx + (Math.random() - 0.5) * 20,
+                    y: dy + (Math.random() - 0.5) * 15,
+                    vx: (Math.random() - 0.5) * 3, vy: -1 - Math.random() * 2,
+                    life: 1.0, decay: 0.02 + Math.random() * 0.015,
+                    size: 12 + Math.random() * 12,
+                });
+            }
+            playFireSound();
+        }
+
+        function updateCharacterState(deltaSec) {
+            const s = characterState.samurai;
+
+            if (s.state === 'jumpAttack') {
+                s.timer -= deltaSec;
+                const elapsed = TOTAL_JUMP_ATTACK - s.timer;
+
+                if (elapsed <= JUMP_DURATION) {
+                    s.jumpProgress = elapsed / JUMP_DURATION;
+                } else if (elapsed <= JUMP_DURATION + SLASH_MOMENT) {
+                    s.jumpProgress = 1;
+                    if (!s.slashTriggered) {
+                        s.slashTriggered = true;
+                        triggerSlashMoment();
+                    }
+                } else {
+                    const returnElapsed = elapsed - JUMP_DURATION - SLASH_MOMENT;
+                    s.jumpProgress = 1 - (returnElapsed / RETURN_DURATION);
+                    if (s.jumpProgress < 0) s.jumpProgress = 0;
+                }
+
+                if (s.timer <= 0) {
+                    s.state = 'idle';
+                    s.timer = 0;
+                    s.jumpProgress = 0;
+                    s.slashTriggered = false;
+                }
+            } else if (s.state === 'hurt') {
+                s.timer -= deltaSec;
+                if (s.timer <= 0) {
+                    s.state = 'idle';
+                    s.timer = 0;
+                }
+            }
+
+            if (characterState.dragon.state !== 'idle') {
+                characterState.dragon.timer -= deltaSec;
+                if (characterState.dragon.timer <= 0) {
+                    characterState.dragon.state = 'idle';
+                    characterState.dragon.timer = 0;
+                }
+            }
+
+            for (let i = characterState.slashEffects.length - 1; i >= 0; i--) {
+                const sl = characterState.slashEffects[i];
+                sl.life -= sl.decay * deltaSec * 60;
+                if (sl.life <= 0) characterState.slashEffects.splice(i, 1);
+            }
+
+            for (let i = characterState.fireEffects.length - 1; i >= 0; i--) {
+                const f = characterState.fireEffects[i];
+                f.x += f.vx * deltaSec * 60;
+                f.y += f.vy * deltaSec * 60;
+                f.life -= f.decay * deltaSec * 60;
+                if (f.life <= 0) characterState.fireEffects.splice(i, 1);
+            }
+        }
+
+        function updatePositions(deltaSec) {
+            if (!gameRunning) return;
+            const step = deltaSec * 60;
+
+            for (let i = activeWords.length - 1; i >= 0; i--) {
+                const w = activeWords[i];
+                w.y += w.speed * deltaSec;
+
+                if (w.y > canvasHeight + 20) {
+                    if (GODAN_SET.has(w.text)) {
+                        missCount++;
+                        currentHealth = Math.max(0, currentHealth - 1);
+                        updateHealthUI();
+                        playMissSound();
+                        showStatus(`⏰ 漏掉五段动词「${w.text}」 -1 ❤️`, false);
+
+                        const samuraiX = canvasWidth * SAMURAI_X_RATIO;
+                        const samuraiY = canvasHeight * GROUND_RATIO - 70;
+                        addFloatingText('-1', samuraiX, samuraiY, '#ff2222');
+
+                        if (currentHealth <= 0) {
+                            triggerGameOver();
+                        }
+                    }
+                    activeWords.splice(i, 1);
+                }
+            }
+
+            for (let i = slicedPieces.length - 1; i >= 0; i--) {
+                const p = slicedPieces[i];
+                p.vy += p.gravity * step;
+                p.x += p.vx * step;
+                p.y += p.vy * step;
+                p.rotation += p.rotSpeed * step;
+                p.life -= p.decay * step;
+                if (p.life <= 0 || p.y > canvasHeight + 150 || p.x < -200 || p.x > canvasWidth + 200) {
+                    slicedPieces.splice(i, 1);
+                }
+            }
+
+            for (let i = bladeTrails.length - 1; i >= 0; i--) {
+                const t = bladeTrails[i];
+                t.life -= t.decay * step;
+                if (t.life <= 0) bladeTrails.splice(i, 1);
+            }
+
+            for (let i = explosions.length - 1; i >= 0; i--) {
+                const e = explosions[i];
+                e.vy += e.gravity * step;
+                e.x += e.vx * step;
+                e.y += e.vy * step;
+                e.vx *= 0.97;
+                e.life -= e.decay * step;
+                if (e.life <= 0) explosions.splice(i, 1);
+            }
+
+            for (let i = floatingTexts.length - 1; i >= 0; i--) {
+                const ft = floatingTexts[i];
+                ft.x += ft.vx * deltaSec;
+                ft.y += ft.vy * deltaSec;
+                ft.vy *= 0.98;
+                ft.life -= ft.decay * deltaSec;
+                if (ft.life <= 0) floatingTexts.splice(i, 1);
+            }
+
+            updateCharacterState(deltaSec);
+        }
+
+        function drawKyotoBackground() {
+            const groundY = canvasHeight * GROUND_RATIO;
+
+            ctx.save();
+
+            const skyGrad = ctx.createLinearGradient(0, 0, 0, groundY);
+            skyGrad.addColorStop(0, '#4a3a5c');
+            skyGrad.addColorStop(0.25, '#7a5a7e');
+            skyGrad.addColorStop(0.5, '#c98a8a');
+            skyGrad.addColorStop(0.75, '#f0b888');
+            skyGrad.addColorStop(1, '#f5d4a8');
+            ctx.fillStyle = skyGrad;
+            ctx.fillRect(0, 0, canvasWidth, groundY);
+
+            clouds.forEach(c => {
+                ctx.save();
+                ctx.globalAlpha = c.alpha;
+                const cloudGrad = ctx.createLinearGradient(c.x, c.y - c.height, c.x, c.y + c.height);
+                cloudGrad.addColorStop(0, 'rgba(255, 235, 220, 0.95)');
+                cloudGrad.addColorStop(0.6, 'rgba(255, 225, 210, 0.7)');
+                cloudGrad.addColorStop(1, 'rgba(255, 220, 200, 0)');
+                ctx.fillStyle = cloudGrad;
+                ctx.beginPath();
+                ctx.ellipse(c.x, c.y, c.width, c.height, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = c.alpha * 0.6;
+                ctx.fillStyle = 'rgba(255, 245, 235, 0.9)';
+                ctx.beginPath();
+                ctx.ellipse(c.x - c.width * 0.2, c.y - c.height * 0.3, c.width * 0.7, c.height * 0.7, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            ctx.save();
+            ctx.globalAlpha = 0.25;
+            ctx.fillStyle = '#5a4a6a';
+            ctx.beginPath();
+            ctx.moveTo(0, groundY);
+            ctx.quadraticCurveTo(canvasWidth * 0.15, groundY - 70, canvasWidth * 0.3, groundY - 40);
+            ctx.quadraticCurveTo(canvasWidth * 0.45, groundY - 20, canvasWidth * 0.6, groundY - 55);
+            ctx.quadraticCurveTo(canvasWidth * 0.8, groundY - 85, canvasWidth, groundY - 30);
+            ctx.lineTo(canvasWidth, groundY);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+
+            drawSakuraForest(groundY);
+
+            const pagodaBaseX = canvasWidth * 0.38;
+            const pagodaBaseY = groundY;
+            const pagodaScale = Math.min(canvasWidth, canvasHeight) / 500 * 1.25;
+            drawPagoda(pagodaBaseX, pagodaBaseY, pagodaScale);
+
+            const mistGrad = ctx.createLinearGradient(0, groundY - 40, 0, groundY);
+            mistGrad.addColorStop(0, 'rgba(255, 220, 200, 0)');
+            mistGrad.addColorStop(1, 'rgba(255, 220, 200, 0.6)');
+            ctx.fillStyle = mistGrad;
+            ctx.fillRect(0, groundY - 40, canvasWidth, 40);
+
+            ctx.restore();
+        }
+
+        function drawSakuraForest(groundY) {
+            const trees = [
+                { xRatio: 0.08, scale: 1.15, variant: 0, depth: 0.9, swayPhase: 0 },
+                { xRatio: 0.20, scale: 1.0, variant: 1, depth: 0.85, swayPhase: 1.2 },
+                { xRatio: 0.30, scale: 0.85, variant: 2, depth: 0.75, swayPhase: 2.4 },
+                { xRatio: 0.52, scale: 0.95, variant: 0, depth: 0.8, swayPhase: 3.6 },
+                { xRatio: 0.62, scale: 0.8, variant: 1, depth: 0.7, swayPhase: 4.8 },
+                { xRatio: 0.72, scale: 0.9, variant: 2, depth: 0.75, swayPhase: 6.0 },
+                { xRatio: 0.82, scale: 0.75, variant: 0, depth: 0.65, swayPhase: 7.2 },
+                { xRatio: 0.15, scale: 0.65, variant: 1, depth: 0.55, swayPhase: 8.4 },
+                { xRatio: 0.40, scale: 0.6, variant: 2, depth: 0.5, swayPhase: 9.6 },
+                { xRatio: 0.58, scale: 0.62, variant: 0, depth: 0.52, swayPhase: 10.8 },
+                { xRatio: 0.88, scale: 0.7, variant: 1, depth: 0.6, swayPhase: 12.0 },
+                { xRatio: 0.95, scale: 0.55, variant: 2, depth: 0.45, swayPhase: 13.2 },
+            ];
+
+            const sortedTrees = [...trees].sort((a, b) => a.depth - b.depth);
+
+            sortedTrees.forEach(t => {
+                const baseX = canvasWidth * t.xRatio;
+                const baseY = groundY + (1 - t.depth) * 8;
+                const scale = Math.min(canvasWidth, canvasHeight) / 500 * t.scale;
+                drawSakuraTree(baseX, baseY, scale, t.variant, t.depth, t.swayPhase);
+            });
+        }
+
+        function drawPagoda(baseX, baseY, scale) {
+            ctx.save();
+            ctx.translate(baseX, baseY);
+            ctx.scale(scale, scale);
+
+            const wallColor = '#c9a878';
+            const wallDark = '#8b6a48';
+            const roofColor = '#5a3a30';
+            const roofDark = '#3a2018';
+            const pillarColor = '#8b3a2a';
+
+            const layers = 5;
+            const baseWidth = 56;
+            const baseLayerHeight = 26;
+
+            for (let i = 0; i < layers; i++) {
+                const layerBottom = -i * baseLayerHeight - 8;
+                const layerTop = layerBottom - baseLayerHeight;
+                const layerWidth = baseWidth * (1 - i * 0.1);
+                const layerHalfW = layerWidth / 2;
+                const roofWidth = layerWidth + 14;
+
+                ctx.fillStyle = wallColor;
+                ctx.fillRect(-layerHalfW, layerTop, layerWidth, baseLayerHeight);
+                ctx.fillStyle = wallDark;
+                ctx.fillRect(layerHalfW - 6, layerTop, 6, baseLayerHeight);
+                ctx.fillStyle = wallDark;
+                ctx.fillRect(-layerHalfW, layerTop, 2, baseLayerHeight);
+
+                ctx.fillStyle = pillarColor;
+                ctx.fillRect(-layerHalfW, layerTop, 3, baseLayerHeight);
+                ctx.fillRect(layerHalfW - 3, layerTop, 3, baseLayerHeight);
+                ctx.fillRect(-1.5, layerTop, 3, baseLayerHeight);
+
+                ctx.fillStyle = '#3a2018';
+                const winW = layerWidth * 0.18;
+                const winH = baseLayerHeight * 0.4;
+                const winY = layerTop + baseLayerHeight * 0.3;
+                ctx.fillRect(-layerHalfW + layerWidth * 0.18, winY, winW, winH);
+                ctx.fillRect(layerHalfW - layerWidth * 0.18 - winW, winY, winW, winH);
+
+                ctx.fillStyle = roofColor;
+                ctx.beginPath();
+                ctx.moveTo(-roofWidth / 2, layerTop);
+                ctx.lineTo(roofWidth / 2, layerTop);
+                ctx.lineTo(layerHalfW + 6, layerTop + 6);
+                ctx.quadraticCurveTo(0, layerTop + 10, -(layerHalfW + 6), layerTop + 6);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = roofDark;
+                ctx.beginPath();
+                ctx.moveTo(-roofWidth / 2, layerTop);
+                ctx.quadraticCurveTo(0, layerTop - 3, roofWidth / 2, layerTop);
+                ctx.lineTo(layerHalfW + 4, layerTop + 2);
+                ctx.quadraticCurveTo(0, layerTop - 1, -(layerHalfW + 4), layerTop + 2);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = roofColor;
+                ctx.beginPath();
+                ctx.moveTo(-roofWidth / 2, layerTop);
+                ctx.lineTo(-roofWidth / 2 - 4, layerTop - 3);
+                ctx.lineTo(-roofWidth / 2 + 4, layerTop + 2);
+                ctx.closePath();
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(roofWidth / 2, layerTop);
+                ctx.lineTo(roofWidth / 2 + 4, layerTop - 3);
+                ctx.lineTo(roofWidth / 2 - 4, layerTop + 2);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.strokeStyle = 'rgba(255, 200, 150, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(-roofWidth / 2 + 2, layerTop + 1);
+                ctx.lineTo(roofWidth / 2 - 2, layerTop + 1);
+                ctx.stroke();
+            }
+
+            const topY = -layers * baseLayerHeight - 8;
+            ctx.fillStyle = roofColor;
+            ctx.fillRect(-10, topY - 4, 20, 6);
+            ctx.fillStyle = '#d4a017';
+            for (let i = 0; i < 9; i++) {
+                const y = topY - 8 - i * 3;
+                const r = 6 - i * 0.5;
+                ctx.beginPath();
+                ctx.arc(0, y, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.fillStyle = '#ffd966';
+            ctx.beginPath();
+            ctx.arc(0, topY - 8 - 9 * 3 - 4, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(-1, topY - 8 - 9 * 3 - 5, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawSakuraTree(baseX, baseY, scale, variant, depth, swayPhase) {
+            ctx.save();
+            ctx.translate(baseX, baseY);
+            ctx.scale(scale, scale);
+            ctx.globalAlpha = 0.5 + depth * 0.5;
+
+            const swayAngle = Math.sin(sakuraSwayTime * SAKURA_SWAY_SPEED + swayPhase) * 0.03;
+            ctx.rotate(swayAngle);
+
+            const trunkColor = depth > 0.7 ? '#5a3a28' : '#6b4a38';
+            const trunkOutline = depth > 0.7 ? '#3a2018' : '#4a3020';
+            ctx.fillStyle = trunkColor;
+            ctx.strokeStyle = trunkOutline;
+            ctx.lineWidth = 1.5;
+
+            ctx.beginPath();
+            ctx.moveTo(-6, 0);
+            ctx.quadraticCurveTo(-4, -30, -2, -55);
+            ctx.lineTo(4, -55);
+            ctx.quadraticCurveTo(6, -30, 8, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(-2, -40);
+            ctx.quadraticCurveTo(-15, -55, -22, -70);
+            ctx.lineTo(-18, -72);
+            ctx.quadraticCurveTo(-10, -58, 0, -48);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(2, -45);
+            ctx.quadraticCurveTo(15, -58, 20, -72);
+            ctx.lineTo(16, -74);
+            ctx.quadraticCurveTo(10, -62, 0, -52);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(-1, -52);
+            ctx.quadraticCurveTo(-6, -68, -3, -82);
+            ctx.lineTo(1, -82);
+            ctx.quadraticCurveTo(2, -68, 2, -55);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            const blossomSway = Math.sin(sakuraSwayTime * SAKURA_SWAY_SPEED + swayPhase) * 1.5;
+
+            const blossomPalettes = [
+                ['#ffb7c5', '#ff9eb0', '#ffc4d0', '#f5a0b5', '#ffd0db'],
+                ['#ffd1dc', '#ffc0cb', '#ffd9e0', '#ffb6c1', '#ffe4ec'],
+                ['#ff9eb0', '#f58ea3', '#ffa8b8', '#ef7f95', '#ffb8c6'],
+            ];
+            const palette = blossomPalettes[variant % blossomPalettes.length];
+
+            const clusters = [
+                { x: -15, y: -75, r: 22 }, { x: 5, y: -85, r: 24 },
+                { x: -28, y: -68, r: 16 }, { x: 22, y: -78, r: 18 },
+                { x: -8, y: -92, r: 20 }, { x: 15, y: -92, r: 16 },
+                { x: -22, y: -85, r: 14 }, { x: 28, y: -88, r: 12 },
+                { x: -32, y: -78, r: 10 }, { x: 32, y: -82, r: 9 },
+                { x: -15, y: -100, r: 12 }, { x: 8, y: -102, r: 11 },
+                { x: -25, y: -95, r: 9 }, { x: 22, y: -98, r: 10 },
+            ];
+
+            ctx.save();
+            ctx.globalAlpha *= 0.3;
+            ctx.fillStyle = '#ffd1dc';
+            clusters.forEach(c => {
+                ctx.beginPath();
+                ctx.arc(c.x + blossomSway, c.y, c.r + 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.restore();
+
+            clusters.forEach((c, idx) => {
+                const color = palette[idx % palette.length];
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(c.x + blossomSway, c.y, c.r, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = 'rgba(200, 80, 120, 0.3)';
+                ctx.beginPath();
+                ctx.arc(c.x + blossomSway + (Math.random() - 0.5) * c.r * 0.5, c.y + (Math.random() - 0.5) * c.r * 0.5, c.r * 0.3, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.beginPath();
+                ctx.arc(c.x + blossomSway - c.r * 0.3, c.y - c.r * 0.3, c.r * 0.25, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            ctx.fillStyle = palette[0];
+            for (let i = 0; i < 10; i++) {
+                const px = (Math.random() - 0.5) * 80 + blossomSway;
+                const py = -70 - Math.random() * 40;
+                const pr = 2 + Math.random() * 2;
+                ctx.beginPath();
+                ctx.arc(px, py, pr, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+
+        function drawWall() {
+            const groundY = canvasHeight * GROUND_RATIO;
+            const wallTop = groundY;
+            const wallBottom = canvasHeight;
+            const wallHeight = wallBottom - wallTop;
+            const wallWidth = canvasWidth;
+
+            ctx.save();
+
+            const wallGrad = ctx.createLinearGradient(0, wallTop, 0, wallBottom);
+            wallGrad.addColorStop(0, '#8a9ba8');
+            wallGrad.addColorStop(0.3, '#6d7e8c');
+            wallGrad.addColorStop(1, '#4a5560');
+            ctx.fillStyle = wallGrad;
+            ctx.fillRect(0, wallTop, wallWidth, wallHeight);
+
+            ctx.strokeStyle = 'rgba(40, 50, 60, 0.45)';
+            ctx.lineWidth = 1;
+            const brickH = wallHeight / 5;
+            for (let i = 1; i < 5; i++) {
+                const y = wallTop + brickH * i;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(wallWidth, y);
+                ctx.stroke();
+            }
+
+            const brickW = wallWidth / 8;
+            for (let row = 0; row < 5; row++) {
+                const offsetX = (row % 2 === 0) ? 0 : brickW / 2;
+                const y1 = wallTop + brickH * row;
+                const y2 = y1 + brickH;
+                for (let col = 0; col < 9; col++) {
+                    const x = col * brickW + offsetX;
+                    if (x > 0 && x < wallWidth) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, y1);
+                        ctx.lineTo(x, y2);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            ctx.strokeStyle = 'rgba(200, 215, 225, 0.15)';
+            ctx.lineWidth = 1;
+            for (let row = 0; row < 5; row++) {
+                const offsetX = (row % 2 === 0) ? 0 : brickW / 2;
+                const y1 = wallTop + brickH * row + 0.5;
+                for (let col = 0; col < 9; col++) {
+                    const x = col * brickW + offsetX;
+                    if (x > 0 && x < wallWidth) {
+                        ctx.beginPath();
+                        ctx.moveTo(x + 1, y1);
+                        ctx.lineTo(x + brickW - 1, y1);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            ctx.fillStyle = '#5a6670';
+            ctx.fillRect(0, wallTop - 3, wallWidth, 4);
+
+            const merlonW = 22;
+            const merlonH = 12;
+            const gap = 14;
+            const totalUnit = merlonW + gap;
+            const merlonCount = Math.ceil(wallWidth / totalUnit) + 1;
+
+            for (let i = 0; i < merlonCount; i++) {
+                const mx = i * totalUnit - gap / 2;
+                const mGrad = ctx.createLinearGradient(0, wallTop - merlonH, 0, wallTop);
+                mGrad.addColorStop(0, '#9aabb8');
+                mGrad.addColorStop(1, '#6d7e8c');
+                ctx.fillStyle = mGrad;
+                ctx.fillRect(mx, wallTop - merlonH, merlonW, merlonH);
+
+                ctx.fillStyle = 'rgba(220, 235, 245, 0.3)';
+                ctx.fillRect(mx, wallTop - merlonH, merlonW, 2);
+
+                ctx.strokeStyle = 'rgba(40, 50, 60, 0.6)';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(mx, wallTop - merlonH, merlonW, merlonH);
+
+                ctx.beginPath();
+                ctx.moveTo(mx + merlonW / 2, wallTop - merlonH);
+                ctx.lineTo(mx + merlonW / 2, wallTop);
+                ctx.strokeStyle = 'rgba(40, 50, 60, 0.35)';
+                ctx.stroke();
+            }
+
+            const bottomShadow = ctx.createLinearGradient(0, wallBottom - 20, 0, wallBottom);
+            bottomShadow.addColorStop(0, 'rgba(0,0,0,0)');
+            bottomShadow.addColorStop(1, 'rgba(0,0,0,0.5)');
+            ctx.fillStyle = bottomShadow;
+            ctx.fillRect(0, wallBottom - 20, wallWidth, 20);
+
+            ctx.fillStyle = 'rgba(80, 110, 70, 0.25)';
+            for (let i = 0; i < 8; i++) {
+                const mx = Math.random() * wallWidth;
+                const my = wallTop + Math.random() * wallHeight * 0.7 + wallHeight * 0.2;
+                ctx.beginPath();
+                ctx.ellipse(mx, my, 4 + Math.random() * 6, 2 + Math.random() * 3, 0, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+
+        function drawWordCard(x, y, width, height, text, alpha = 1.0) {
+            const radius = 8;
+            ctx.save();
+            ctx.globalAlpha = alpha;
+
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+            ctx.shadowBlur = 12;
+            ctx.shadowOffsetY = 5;
+
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+
+            const gradient = ctx.createLinearGradient(x, y, x, y + height);
+            gradient.addColorStop(0, '#f5e6c8');
+            gradient.addColorStop(1, '#e8d4a8');
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            ctx.shadowBlur = 7;
+            ctx.shadowOffsetY = 2;
+            ctx.strokeStyle = '#8b3a2a';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.shadowColor = 'transparent';
+            ctx.strokeStyle = '#d4a86a';
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(x + 4, y + 4, width - 8, height - 8);
+
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+
+            ctx.font = `bold ${WORD_FONT_SIZE}px "Yu Mincho", "Hiragino Mincho ProN", serif`;
+            ctx.fillStyle = '#3a1a10';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, x + width / 2, y + height / 2);
+            ctx.restore();
+        }
+
+        function drawSlicePiece(p) {
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, p.life);
+            const centerX = p.x + p.width / 2;
+            const centerY = p.y + p.height / 2;
+            ctx.translate(centerX, centerY);
+            ctx.rotate(p.rotation);
+
+            const halfW = p.width;
+            const h = p.height;
+            const radius = 5;
+
+            ctx.beginPath();
+            if (p.side === 'left') {
+                ctx.moveTo(-halfW / 2 + radius, -h / 2);
+                ctx.lineTo(0, -h / 2);
+                ctx.lineTo(0, h / 2);
+                ctx.lineTo(-halfW / 2 + radius, h / 2);
+                ctx.quadraticCurveTo(-halfW / 2, h / 2, -halfW / 2, h / 2 - radius);
+                ctx.lineTo(-halfW / 2, -h / 2 + radius);
+                ctx.quadraticCurveTo(-halfW / 2, -h / 2, -halfW / 2 + radius, -h / 2);
+            } else {
+                ctx.moveTo(0, -h / 2);
+                ctx.lineTo(halfW / 2 - radius, -h / 2);
+                ctx.quadraticCurveTo(halfW / 2, -h / 2, halfW / 2, -h / 2 + radius);
+                ctx.lineTo(halfW / 2, h / 2 - radius);
+                ctx.quadraticCurveTo(halfW / 2, h / 2, halfW / 2 - radius, h / 2);
+                ctx.lineTo(0, h / 2);
+                ctx.lineTo(0, -h / 2);
+            }
+            ctx.closePath();
+
+            const gradient = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+            gradient.addColorStop(0, p.baseColor);
+            gradient.addColorStop(1, p.darkColor);
+            ctx.fillStyle = gradient;
+            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetY = 3;
+            ctx.fill();
+
+            ctx.shadowBlur = 4;
+            ctx.strokeStyle = '#f5e6c8cc';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+
+            ctx.save();
+            ctx.clip();
+            ctx.font = `bold ${WORD_FONT_SIZE}px "Yu Mincho", "Hiragino Mincho ProN", serif`;
+            ctx.fillStyle = '#f5e6c8';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            if (p.side === 'left') {
+                ctx.fillText(p.text, p.width / 2, 0);
+            } else {
+                ctx.fillText(p.text, -p.width / 2, 0);
+            }
+            ctx.restore();
+
+            ctx.restore();
+        }
+
+        function drawBladeTrails() {
+            bladeTrails.forEach(t => {
+                ctx.save();
+                ctx.globalAlpha = t.life * 0.9;
+                ctx.translate(t.x, t.y);
+                ctx.rotate(t.angle);
+                const grad = ctx.createLinearGradient(-t.length / 2, 0, t.length / 2, 0);
+                grad.addColorStop(0, 'transparent');
+                grad.addColorStop(0.5, t.color);
+                grad.addColorStop(1, 'transparent');
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = t.width;
+                ctx.lineCap = 'round';
+                ctx.shadowColor = t.color;
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.moveTo(-t.length / 2, 0);
+                ctx.lineTo(t.length / 2, 0);
+                ctx.stroke();
+                ctx.restore();
+            });
+        }
+
+        function drawExplosions() {
+            explosions.forEach(e => {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, e.life);
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, e.size * e.life, 0, Math.PI * 2);
+                ctx.fillStyle = e.color;
+                ctx.shadowColor = e.color;
+                ctx.shadowBlur = 18;
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+
+        function drawFloatingTexts() {
+            floatingTexts.forEach(ft => {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, ft.life);
+
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                ctx.shadowBlur = 6;
+                ctx.shadowOffsetY = 2;
+
+                ctx.font = 'bold ' + ft.size + 'px "Yu Mincho", "Hiragino Mincho ProN", serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                ctx.shadowColor = ft.color;
+                ctx.shadowBlur = 16;
+                ctx.fillStyle = ft.color;
+                ctx.fillText(ft.text, ft.x, ft.y);
+
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.strokeText(ft.text, ft.x, ft.y);
+                ctx.fillStyle = ft.color;
+                ctx.fillText(ft.text, ft.x, ft.y);
+
+                ctx.restore();
+            });
+        }
+
+        function drawSamurai() {
+            const baseX = canvasWidth * SAMURAI_X_RATIO;
+            const baseY = canvasHeight * GROUND_RATIO;
+            const scale = Math.min(canvasWidth, canvasHeight) / CHARACTER_SCALE_DIVISOR;
+            const s = characterState.samurai;
+
+            const dragonX = canvasWidth * DRAGON_X_RATIO;
+            const targetX = dragonX - 50 * scale;
+
+            let currentX = baseX;
+            let airborne = 0;
+
+            if (s.state === 'jumpAttack') {
+                const p = s.jumpProgress;
+                currentX = baseX + (targetX - baseX) * p;
+                const jumpHeight = 70 * scale;
+                airborne = 4 * jumpHeight * p * (1 - p);
+            }
+
+            let shakeX = 0, shakeY = 0;
+            if (s.state === 'hurt') {
+                shakeX = (Math.random() - 0.5) * 6;
+                shakeY = (Math.random() - 0.5) * 4;
+            }
+
+            let swordAngle = -0.6;
+            if (s.state === 'jumpAttack') {
+                const p = s.jumpProgress;
+                if (p >= 1.0) {
+                    swordAngle = -0.6 + 2.0;
+                } else if (p < 0.15 && s.timer < TOTAL_JUMP_ATTACK - JUMP_DURATION - SLASH_MOMENT) {
+                    swordAngle = -0.6 + 2.0 * (p / 0.15);
+                }
+            }
+
+            ctx.save();
+            ctx.translate(currentX + shakeX, baseY - airborne + shakeY);
+            ctx.scale(scale, scale);
+
+            ctx.save();
+            const shadowScale = 1 - (airborne / (70 * scale)) * 0.5;
+            ctx.globalAlpha = 0.35 * shadowScale;
+            ctx.beginPath();
+            ctx.ellipse(0, 4, 30 * shadowScale, 8 * shadowScale, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#000000';
+            ctx.fill();
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.moveTo(-16, -22);
+            ctx.lineTo(16, -22);
+            ctx.lineTo(20, 2);
+            ctx.lineTo(-20, 2);
+            ctx.closePath();
+            ctx.fillStyle = '#2c5f9e';
+            ctx.strokeStyle = '#1a3a63';
+            ctx.lineWidth = 2;
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#d4a017';
+            ctx.fillRect(-20, -10, 40, 6);
+            ctx.strokeStyle = '#a37a0a';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(-20, -10, 40, 6);
+
+            ctx.beginPath();
+            ctx.arc(-18, -22, 8, Math.PI, Math.PI * 1.5);
+            ctx.lineTo(-10, -22);
+            ctx.closePath();
+            ctx.fillStyle = '#1e4a7a';
+            ctx.strokeStyle = '#0f2a4a';
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(18, -22, 8, Math.PI * 1.5, Math.PI * 2);
+            ctx.lineTo(10, -22);
+            ctx.closePath();
+            ctx.fillStyle = '#1e4a7a';
+            ctx.strokeStyle = '#0f2a4a';
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(0, -38, 16, 0, Math.PI * 2);
+            ctx.fillStyle = '#f5d7b0';
+            ctx.strokeStyle = '#c9a87a';
+            ctx.lineWidth = 2;
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(0, -54, 7, 0, Math.PI * 2);
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(0, -42, 16, Math.PI, Math.PI * 2);
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fill();
+            ctx.fillStyle = '#d4a017';
+            ctx.fillRect(-16, -46, 32, 4);
+
+            ctx.fillStyle = '#1a1a1a';
+            if (s.state === 'jumpAttack') {
+                ctx.fillRect(-8, -40, 5, 2);
+                ctx.fillRect(3, -40, 5, 2);
+            } else if (s.state === 'hurt') {
+                ctx.strokeStyle = '#1a1a1a';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(-9, -42); ctx.lineTo(-4, -37);
+                ctx.moveTo(-4, -42); ctx.lineTo(-9, -37);
+                ctx.moveTo(4, -42); ctx.lineTo(9, -37);
+                ctx.moveTo(9, -42); ctx.lineTo(4, -37);
+                ctx.stroke();
+            } else {
+                ctx.beginPath();
+                ctx.arc(-6, -40, 2.5, 0, Math.PI * 2);
+                ctx.arc(6, -40, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.strokeStyle = '#8b5a3a';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            if (s.state === 'jumpAttack') {
+                ctx.arc(0, -32, 4, 0, Math.PI);
+            } else {
+                ctx.moveTo(-3, -31);
+                ctx.lineTo(3, -31);
+            }
+            ctx.stroke();
+
+            ctx.save();
+            ctx.translate(14, -20);
+            ctx.rotate(swordAngle);
+            ctx.fillStyle = '#5a3a1a';
+            ctx.fillRect(-2, -4, 4, 14);
+            ctx.fillStyle = '#d4a017';
+            ctx.fillRect(-6, -5, 12, 3);
+            const bladeGrad = ctx.createLinearGradient(0, -40, 0, -5);
+            bladeGrad.addColorStop(0, '#ffffff');
+            bladeGrad.addColorStop(1, '#c0c8d0');
+            ctx.beginPath();
+            ctx.moveTo(-2, -5);
+            ctx.lineTo(0, -45);
+            ctx.lineTo(2, -5);
+            ctx.closePath();
+            ctx.fillStyle = bladeGrad;
+            ctx.strokeStyle = '#8899aa';
+            ctx.lineWidth = 1;
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.restore();
+        }
+
+        function drawDragon() {
+            const baseX = canvasWidth * DRAGON_X_RATIO;
+            const baseY = canvasHeight * GROUND_RATIO;
+            const scale = Math.min(canvasWidth, canvasHeight) / CHARACTER_SCALE_DIVISOR;
+            const d = characterState.dragon;
+
+            let shakeX = 0, shakeY = 0;
+            if (d.state === 'hurt') {
+                shakeX = (Math.random() - 0.5) * 8;
+                shakeY = (Math.random() - 0.5) * 6;
+            }
+
+            let attackLean = 0;
+            if (d.state === 'attack') {
+                const progress = 1 - (d.timer / FIRE_DURATION);
+                attackLean = -Math.sin(progress * Math.PI) * 14;
+            }
+
+            ctx.save();
+            ctx.translate(baseX + shakeX + attackLean, baseY + shakeY);
+            ctx.scale(scale, scale);
+
+            ctx.save();
+            ctx.globalAlpha = 0.35;
+            ctx.beginPath();
+            ctx.ellipse(0, 4, 34, 10, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#000000';
+            ctx.fill();
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.moveTo(18, -18);
+            ctx.quadraticCurveTo(50, -10, 58, -32);
+            ctx.quadraticCurveTo(62, -40, 56, -42);
+            ctx.quadraticCurveTo(46, -26, 22, -24);
+            ctx.closePath();
+            ctx.fillStyle = '#d32f2f';
+            ctx.strokeStyle = '#8b1a1a';
+            ctx.lineWidth = 2;
+            ctx.fill();
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(56, -42);
+            ctx.lineTo(66, -46);
+            ctx.lineTo(60, -36);
+            ctx.lineTo(70, -38);
+            ctx.lineTo(62, -30);
+            ctx.closePath();
+            ctx.fillStyle = '#ff9800';
+            ctx.fill();
+            ctx.strokeStyle = '#e65100';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.ellipse(0, -28, 28, 30, 0, 0, Math.PI * 2);
+            const bodyGrad = ctx.createRadialGradient(-8, -36, 5, 0, -28, 32);
+            bodyGrad.addColorStop(0, '#ff5252');
+            bodyGrad.addColorStop(1, '#c62828');
+            ctx.fillStyle = bodyGrad;
+            ctx.strokeStyle = '#8b1a1a';
+            ctx.lineWidth = 2;
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.ellipse(0, -22, 17, 20, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffd54f';
+            ctx.strokeStyle = '#f9a825';
+            ctx.lineWidth = 1.5;
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.save();
+            ctx.globalAlpha = 0.9;
+            ctx.beginPath();
+            ctx.moveTo(-22, -36);
+            ctx.quadraticCurveTo(-46, -50, -38, -24);
+            ctx.quadraticCurveTo(-42, -32, -22, -30);
+            ctx.closePath();
+            ctx.fillStyle = '#e53935';
+            ctx.fill();
+            ctx.strokeStyle = '#8b1a1a';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(22, -34);
+            ctx.quadraticCurveTo(50, -52, 42, -22);
+            ctx.quadraticCurveTo(46, -32, 22, -28);
+            ctx.closePath();
+            ctx.fillStyle = '#ef5350';
+            ctx.fill();
+            ctx.strokeStyle = '#8b1a1a';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.ellipse(-16, -2, 7, 5, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#d32f2f';
+            ctx.strokeStyle = '#8b1a1a';
+            ctx.lineWidth = 1.5;
+            ctx.fill();
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.ellipse(16, -2, 7, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.ellipse(0, -50, 22, 20, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#ef5350';
+            ctx.strokeStyle = '#8b1a1a';
+            ctx.lineWidth = 2;
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(-12, -66);
+            ctx.lineTo(-8, -80);
+            ctx.lineTo(-3, -66);
+            ctx.closePath();
+            ctx.fillStyle = '#ffb74d';
+            ctx.strokeStyle = '#e65100';
+            ctx.lineWidth = 1.5;
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(3, -66);
+            ctx.lineTo(8, -80);
+            ctx.lineTo(12, -66);
+            ctx.closePath();
+            ctx.fillStyle = '#ffb74d';
+            ctx.strokeStyle = '#e65100';
+            ctx.lineWidth = 1.5;
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(-18, -62);
+            ctx.lineTo(-24, -72);
+            ctx.lineTo(-14, -66);
+            ctx.closePath();
+            ctx.fillStyle = '#ef5350';
+            ctx.strokeStyle = '#8b1a1a';
+            ctx.lineWidth = 1.5;
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(18, -62);
+            ctx.lineTo(24, -72);
+            ctx.lineTo(14, -66);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            const eyeFill = d.state === 'attack' ? '#ffeb3b' : (d.state === 'hurt' ? '#888888' : '#fff59d');
+            ctx.fillStyle = eyeFill;
+            ctx.beginPath();
+            ctx.ellipse(-9, -52, 5, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#8b1a1a';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.ellipse(9, -52, 5, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = d.state === 'attack' ? '#d32f2f' : '#1a1a1a';
+            if (d.state === 'attack') {
+                ctx.beginPath();
+                ctx.ellipse(-9, -52, 1.5, 5, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(9, -52, 1.5, 5, 0, 0, Math.PI * 2);
+                ctx.fill();
+            } else {
+                ctx.beginPath();
+                ctx.arc(-9, -52, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(9, -52, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(-10, -53.5, 1.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(8, -53.5, 1.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#8b1a1a';
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            if (d.state === 'hurt') {
+                ctx.moveTo(-16, -60); ctx.lineTo(-4, -63);
+                ctx.moveTo(16, -60); ctx.lineTo(4, -63);
+            } else {
+                ctx.moveTo(-16, -62); ctx.lineTo(-4, -58);
+                ctx.moveTo(16, -62); ctx.lineTo(4, -58);
+            }
+            ctx.stroke();
+
+            if (d.state === 'attack') {
+                ctx.beginPath();
+                ctx.moveTo(-10, -42);
+                ctx.quadraticCurveTo(0, -38, 10, -42);
+                ctx.lineTo(12, -36);
+                ctx.quadraticCurveTo(0, -30, -12, -36);
+                ctx.closePath();
+                ctx.fillStyle = '#5d0000';
+                ctx.fill();
+                ctx.strokeStyle = '#8b1a1a';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(-12, -36);
+                ctx.quadraticCurveTo(0, -30, 12, -36);
+                ctx.lineTo(10, -28);
+                ctx.quadraticCurveTo(0, -22, -10, -28);
+                ctx.closePath();
+                ctx.fillStyle = '#5d0000';
+                ctx.fill();
+                ctx.strokeStyle = '#8b1a1a';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.ellipse(0, -34, 9, 7, 0, 0, Math.PI * 2);
+                ctx.fillStyle = '#3a0000';
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.moveTo(-8, -41); ctx.lineTo(-6, -37); ctx.lineTo(-4, -41);
+                ctx.closePath();
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(-1, -40); ctx.lineTo(1, -36); ctx.lineTo(3, -40);
+                ctx.closePath();
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(5, -41); ctx.lineTo(7, -37); ctx.lineTo(9, -41);
+                ctx.closePath();
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(-7, -28); ctx.lineTo(-5, -32); ctx.lineTo(-3, -28);
+                ctx.closePath();
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(2, -28); ctx.lineTo(4, -32); ctx.lineTo(6, -28);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.ellipse(0, -31, 5, 3, 0, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff5252';
+                ctx.fill();
+
+                ctx.save();
+                ctx.globalAlpha = 0.6;
+                const mouthGlow = ctx.createRadialGradient(-12, -34, 2, -12, -34, 25);
+                mouthGlow.addColorStop(0, '#ffffff');
+                mouthGlow.addColorStop(0.3, '#ffdd44');
+                mouthGlow.addColorStop(0.7, '#ff6622');
+                mouthGlow.addColorStop(1, 'rgba(255,60,0,0)');
+                ctx.beginPath();
+                ctx.arc(-12, -34, 25, 0, Math.PI * 2);
+                ctx.fillStyle = mouthGlow;
+                ctx.fill();
+                ctx.restore();
+
+            } else if (d.state === 'hurt') {
+                ctx.beginPath();
+                ctx.ellipse(0, -38, 6, 5, 0, 0, Math.PI * 2);
+                ctx.fillStyle = '#3a0000';
+                ctx.fill();
+                ctx.strokeStyle = '#8b1a1a';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            } else {
+                ctx.beginPath();
+                ctx.moveTo(-8, -40);
+                ctx.quadraticCurveTo(0, -34, 8, -40);
+                ctx.strokeStyle = '#8b1a1a';
+                ctx.lineWidth = 2;
+                ctx.fillStyle = '#3a0000';
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.moveTo(-5, -39); ctx.lineTo(-3, -35); ctx.lineTo(-1, -39);
+                ctx.closePath();
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(2, -39); ctx.lineTo(4, -35); ctx.lineTo(6, -39);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            ctx.fillStyle = '#8b1a1a';
+            ctx.beginPath();
+            ctx.arc(-4, -56, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(4, -56, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#ffb74d';
+            ctx.strokeStyle = '#e65100';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 3; i++) {
+                const bx = -8 + i * 8;
+                const by = -70 + i * 3;
+                ctx.beginPath();
+                ctx.moveTo(bx, by);
+                ctx.lineTo(bx + 4, by - 10);
+                ctx.lineTo(bx + 8, by);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+        function drawSlashEffects() {
+            characterState.slashEffects.forEach(s => {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, s.life);
+                ctx.translate(s.x, s.y);
+                ctx.rotate(s.angle);
+                const grad = ctx.createLinearGradient(-s.length / 2, 0, s.length / 2, 0);
+                grad.addColorStop(0, 'transparent');
+                grad.addColorStop(0.5, '#ffffff');
+                grad.addColorStop(1, 'transparent');
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                ctx.shadowColor = '#ffffff';
+                ctx.shadowBlur = 12;
+                ctx.beginPath();
+                ctx.moveTo(-s.length / 2, 0);
+                ctx.lineTo(s.length / 2, 0);
+                ctx.stroke();
+                ctx.restore();
+            });
+        }
+
+        function drawFireEffects() {
+            characterState.fireEffects.forEach(f => {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, f.life);
+                const grad = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size);
+                grad.addColorStop(0, '#ffffff');
+                grad.addColorStop(0.25, '#ffdd44');
+                grad.addColorStop(0.55, '#ff6622');
+                grad.addColorStop(0.85, '#d32f2f');
+                grad.addColorStop(1, 'rgba(255, 60, 0, 0)');
+                ctx.beginPath();
+                ctx.arc(f.x, f.y, f.size * (1 + (1 - f.life) * 0.6), 0, Math.PI * 2);
+                ctx.fillStyle = grad;
+                ctx.shadowColor = '#ff4400';
+                ctx.shadowBlur = 20;
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+            drawKyotoBackground();
+            drawWall();
+
+            drawDragon();
+            drawSamurai();
+
+            activeWords.forEach(w => drawWordCard(w.x, w.y, w.width, w.height, w.text));
+            slicedPieces.forEach(p => drawSlicePiece(p));
+            drawBladeTrails();
+            drawExplosions();
+
+            drawSlashEffects();
+            drawFireEffects();
+
+            drawFloatingTexts();
+
+            if (gameVictory) {
+                drawFireworks();
+            }
+        }
+
+        function gameLoop(now) {
+            if (!lastTimestamp) {
+                lastTimestamp = now;
+                animationFrame = requestAnimationFrame(gameLoop);
+                return;
+            }
+            const deltaSec = Math.min(0.1, (now - lastTimestamp) / 1000);
+            lastTimestamp = now;
+
+            updateClouds(deltaSec);
+            sakuraSwayTime += deltaSec;
+
+            if (gameVictory) {
+                updateFireworks(deltaSec);
+                autoLaunchFireworks(deltaSec);
+                draw();
+                animationFrame = requestAnimationFrame(gameLoop);
+                return;
+            }
+
+            if (!gameStarted || gamePaused || !gameRunning) {
+                draw();
+                animationFrame = requestAnimationFrame(gameLoop);
+                return;
+            }
+
+            spawnTimer += deltaSec;
+            if (spawnTimer >= SPAWN_INTERVAL && spawnQueue.length > 0) {
+                spawnWord();
+                spawnTimer = 0;
+            }
+
+            updatePositions(deltaSec);
+            draw();
+            animationFrame = requestAnimationFrame(gameLoop);
+        }
+
+        function showStartOverlay() {
+            startOverlay.classList.add('active');
+        }
+
+        function hideStartOverlay() {
+            startOverlay.classList.remove('active');
+        }
+
+        function startGameAfterDifficulty() {
+            gameStarted = true;
+            gamePaused = false;
+            difficultyChosen = true;
+            lastTimestamp = 0;
+            spawnTimer = 0;
+
+            activeWords = [];
+
+            pauseBtn.classList.remove('hidden');
+
+            initAudio();
+            spawnWord();
+            showStatus('游戏开始！点击飘落的单词', true);
+        }
+
+        function startGame() {
+            hideStartOverlay();
+            showDifficultyOverlay();
+        }
+
+        function pauseGame() {
+            if (!gameStarted || gameOver || gameVictory) return;
+            gamePaused = true;
+            startIcon.textContent = '⏸';
+            startTitle.textContent = '已暂停';
+            startSub.textContent = '点击继续游戏';
+            startHint.textContent = '再次点击屏幕继续';
+            showStartOverlay();
+        }
+
+        function resumeGame() {
+            if (!gameStarted || gameOver || gameVictory) return;
+            gamePaused = false;
+            hideStartOverlay();
+            lastTimestamp = 0;
+            showStatus('继续游戏', true);
+        }
+
+        startOverlay.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!gameStarted && !difficultyChosen) {
+                startGame();
+            } else if (gamePaused) {
+                resumeGame();
+            }
+        });
+        startOverlay.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!gameStarted && !difficultyChosen) {
+                startGame();
+            } else if (gamePaused) {
+                resumeGame();
+            }
+        }, { passive: false });
+
+        pauseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!gameStarted || gameOver || gameVictory) return;
+            if (gamePaused) {
+                resumeGame();
+            } else {
+                pauseGame();
+            }
+        });
+        pauseBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!gameStarted || gameOver || gameVictory) return;
+            if (gamePaused) {
+                resumeGame();
+            } else {
+                pauseGame();
+            }
+        }, { passive: false });
+
+        function handleCanvasTap(e) {
+            e.preventDefault();
+
+            if (!gameStarted || gamePaused) return;
+            if (!gameRunning || gameOver) return;
+            initAudio();
+
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvasWidth / rect.width;
+            const scaleY = canvasHeight / rect.height;
+
+            let clientX, clientY;
+            if (e.touches) {
+                if (e.touches.length === 0) return;
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            const canvasX = (clientX - rect.left) * scaleX;
+            const canvasY = (clientY - rect.top) * scaleY;
+
+            for (let i = activeWords.length - 1; i >= 0; i--) {
+                const w = activeWords[i];
+                const hitPadding = 8;
+                if (canvasX >= w.x - hitPadding && canvasX <= w.x + w.width + hitPadding &&
+                    canvasY >= w.y - hitPadding && canvasY <= w.y + w.height + hitPadding) {
+
+                    const isGodan = GODAN_SET.has(w.text);
+
+                    if (isGodan) {
+                        correctCount++;
+                        masteredGodan.add(w.text);
+                        showStatus(`✓ 「${w.text}」是五段动词！`, true);
+                        playCorrectSound();
+                        triggerSamuraiJumpAttack();
+
+                        if (masteredGodan.size >= GODAN_VERBS.length) {
+                            sliceWord(w, isGodan, canvasX, canvasY);
+                            activeWords.splice(i, 1);
+                            triggerVictory();
+                            return;
+                        }
+                    } else {
+                        wrongCount++;
+                        currentHealth = Math.max(0, currentHealth - 1);
+                        updateHealthUI();
+                        showStatus(`✗ 「${w.text}」不是五段动词！ -1 ❤️`, false);
+                        triggerDragonAttack();
+                    }
+
+                    sliceWord(w, isGodan, canvasX, canvasY);
+                    activeWords.splice(i, 1);
+
+                    if (currentHealth <= 0) {
+                        triggerGameOver();
+                    }
+                    return;
+                }
+            }
+        }
+
+        function restartGame() {
+            gameOver = false;
+            gameVictory = false;
+            gameRunning = true;
+            currentHealth = MAX_HEALTH;
+            correctCount = 0;
+            wrongCount = 0;
+            missCount = 0;
+            masteredGodan.clear();
+
+            spawnQueue = shuffleArray(ORIGINAL_POOL);
+            spawnIndex = 0;
+
+            characterState.samurai = {
+                state: 'idle', timer: 0, jumpProgress: 0, slashTriggered: false
+            };
+            characterState.dragon = { state: 'idle', timer: 0 };
+            characterState.slashEffects = [];
+            characterState.fireEffects = [];
+            floatingTexts = [];
+            fireworks = [];
+            fireworkSparks = [];
+
+            updateHealthUI();
+            activeWords = [];
+            slicedPieces = [];
+            bladeTrails = [];
+            explosions = [];
+            spawnTimer = 0;
+            lastTimestamp = 0;
+            statusMsg.textContent = '';
+            gameoverOverlay.classList.remove('active');
+            victoryOverlay.classList.remove('active');
+
+            gameStarted = false;
+            gamePaused = false;
+            difficultyChosen = false;
+            hideDifficultyOverlay();
+
+            pauseBtn.classList.add('hidden');
+
+            startIcon.textContent = '⛩';
+            startTitle.textContent = '点击开始';
+            startSub.textContent = '五段动词判断 · 京都道場';
+            startHint.textContent = '点击或触摸屏幕开始游戏';
+            showStartOverlay();
+
+            if (!animationFrame) {
+                lastTimestamp = 0;
+                animationFrame = requestAnimationFrame(gameLoop);
+            }
+        }
+
+        function requestAddNewWord() {
+            const raw = newWordInput.value.trim();
+            if (!raw) { showStatus('请输入单词', false); return; }
+            const words = raw.split(/[\s,，、]+/).filter(w => w.length > 0);
+            if (words.length === 0) { showStatus('没有有效的单词', false); return; }
+
+            requestPassword(
+                '🔒 添加单词',
+                `确定添加 ${words.length} 个单词？请输入密码`,
+                () => {
+                    let addedCount = 0;
+                    words.forEach(w => {
+                        if (!ORIGINAL_POOL.includes(w)) { ORIGINAL_POOL.push(w); addedCount++; }
+                    });
+
+                    if (addedCount > 0) {
+                        updateWordListDisplay();
+                        newWordInput.value = '';
+                        spawnQueue = spawnQueue.concat(words.filter(w => !spawnQueue.includes(w)));
+                        if (gameRunning && gameStarted && !gamePaused && !gameOver && activeWords.length === 0) spawnWord();
+                        showStatus(`添加了 ${addedCount} 个单词，正在同步…`, true);
+                        saveWordPool().then(ok => {
+                            if (ok) showStatus(`✅ 已同步 ${addedCount} 个单词`, true);
+                        });
+                    } else {
+                        showStatus('单词已存在或无效', false);
+                    }
+                }
+            );
+        }
+
+        function initGame() {
+            resizeCanvas();
+            initClouds();
+            updateWordListDisplay();
+            updateHealthUI();
+            baseSpeedFactor = 3.0;
+            currentDifficultyDisplay.textContent = '简单 3.0x';
+
+            spawnQueue = shuffleArray(ORIGINAL_POOL);
+            spawnIndex = 0;
+
+            activeWords = [];
+            slicedPieces = [];
+            bladeTrails = [];
+            explosions = [];
+            floatingTexts = [];
+            fireworks = [];
+            fireworkSparks = [];
+            currentHealth = MAX_HEALTH;
+            correctCount = 0;
+            wrongCount = 0;
+            missCount = 0;
+            gameOver = false;
+            gameVictory = false;
+            gameStarted = false;
+            gamePaused = false;
+            difficultyChosen = false;
+            masteredGodan.clear();
+            updateHealthUI();
+
+            characterState.samurai = {
+                state: 'idle', timer: 0, jumpProgress: 0, slashTriggered: false
+            };
+            characterState.dragon = { state: 'idle', timer: 0 };
+            characterState.slashEffects = [];
+            characterState.fireEffects = [];
+
+            pauseBtn.classList.add('hidden');
+
+            canvas.addEventListener('touchstart', handleCanvasTap, { passive: false });
+            canvas.addEventListener('mousedown', handleCanvasTap);
+            canvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+
+            addWordBtn.addEventListener('click', requestAddNewWord);
+            newWordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') { e.preventDefault(); requestAddNewWord(); }
+            });
+            restartBtn.addEventListener('click', restartGame);
+            restartBigBtn.addEventListener('click', restartGame);
+            victoryBtn.addEventListener('click', restartGame);
+            clearAllBtn.addEventListener('click', requestClearAll);
+
+            if (animationFrame) cancelAnimationFrame(animationFrame);
+            lastTimestamp = 0;
+            spawnTimer = 0;
+            gameRunning = true;
+            animationFrame = requestAnimationFrame(gameLoop);
+        }
+
+        window.addEventListener('load', async () => {
+            resizeCanvas();
+            showStatus('正在从 GitHub 加载词库…', true);
+            ORIGINAL_POOL = await loadWordPool();
+            initGame();
+            showStatus(`✅ 已加载 ${ORIGINAL_POOL.length} 个单词`, true);
+        });
+
+        if (window.ResizeObserver) {
+            const ro = new ResizeObserver(() => resizeCanvas());
+            ro.observe(container);
+        }
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.target.closest('.canvas-container')) e.preventDefault();
+        }, { passive: false });
+
+    })();
+</script>
+</body>
+</html>
